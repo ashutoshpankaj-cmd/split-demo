@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=412, initial-scale=1, viewport-fit=cover">
+<title>Clay design3 · Group · Balances</title>
+<link rel="stylesheet" href="clay3.css">
+<style>
+.ghead{padding:0 16px 12px}
+.gt{display:flex;align-items:flex-end;justify-content:space-between}
+.stand{margin-top:12px;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.stand small{display:block;font:500 12px var(--sans);color:var(--ink2)}
+.stand b{display:block;font:500 22px/1.1 var(--serif);margin-top:2px}
+.stand b span{font:500 13px var(--sans);color:var(--ink)}
+
+.pad{padding:16px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 8px}
+.tr{min-height:56px;display:flex;align-items:center;gap:12px;padding:0 8px 0 16px;border-bottom:1px solid var(--line)}
+.tr:last-child{border-bottom:0}.tr .w{flex:1;font:400 15px var(--sans)}.tr .w b{font-weight:600}
+.tr .v{font:600 15px var(--sans);margin-right:4px}.tr.mine{background:linear-gradient(90deg,rgba(169,74,36,.06),transparent)}
+.tog{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.tog .t{flex:1}.tog b{display:block;font:600 14px var(--sans)}.tog span{display:block;font:400 12px/1.35 var(--sans);color:var(--ink2);margin-top:2px}
+.sw{width:46px;height:28px;border-radius:14px;background:var(--lapis);position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff}
+.mrow{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--line)}
+.mrow .n{flex:1;font:600 15px var(--sans)}.mrow .n span{display:block;font:400 12px var(--sans);color:var(--ink2)}
+.mrow .r{text-align:right}.mrow .r small{display:block;font:500 11px var(--sans);color:var(--ink2)}.mrow .r b{font:600 15px var(--sans)}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-settle" viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="i-tablet" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
+<symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="i-bksp" viewBox="0 0 24 24"><path d="M9 6h10a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0119 18H9l-5.5-6z"/><path d="M12 10l4 4M16 10l-4 4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 010 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></symbol>
+<symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M18 8v6M15 11h6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 013-3h12l-3-3M20 13v2a3 3 0 01-3 3H5l3 3"/></symbol>
+<symbol id="i-simplify" viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</defs></svg>
+<div class="status"><span class="num">9:41</span><span style="display:flex;gap:6px;align-items:center">
+<svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
+<svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div>
+<div class="nav"><button class="iconbtn ghost" aria-label="Back to tablets"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><span class="sp"></span>
+<button class="iconbtn" aria-label="Search inscriptions"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button><button class="iconbtn" aria-label="Tablet menu"><svg class="ic" aria-hidden="true"><use href="#i-more"/></svg></button></div>
+<header class="ghead">
+ <div class="gt"><div><div class="eyebrow">Tablet · 4 names</div><h1 style="margin-top:6px">Goa Trip</h1></div>
+ <div class="faces"><span class="av c1 ring" aria-hidden="true">Y</span><span class="av c2 ring" aria-hidden="true">A</span><span class="av c3 ring" aria-hidden="true">M</span><span class="av c4 ring" aria-hidden="true">K</span></div></div>
+ <div class="stand"><div><small>Your standing</small><b class="num owe">₹5,800 <span>you owe</span></b></div>
+ <button class="btn sm secondary"><svg class="ic s" aria-hidden="true"><use href="#i-settle"/></svg>Settle up</button></div>
+</header>
+<nav class="ptabs" role="tablist" aria-label="Goa Trip"><a class="ptab" role="tab" aria-selected="false">Inscriptions<span class=cnt>86</span></a><a class="ptab on" role="tab" aria-selected="true">Balances</a><a class="ptab" role="tab" aria-selected="false">Spending</a></nav>
+<div class="pad">
+ <div class="sec-h"><h2>Who pays whom</h2><a class="link">How we got this</a></div>
+ <div class="card">
+  <div class="tog"><div class="t"><b>Hammurabi's shortcut</b><span>Fewest payments, same totals. 3 payments instead of 6.</span></div><div class="sw" role="switch" aria-checked="true" aria-label="Simplify debts"></div></div>
+  <div class="tr mine"><div class="w num">You owe <b>Arjun</b> <b class="owe">₹4,400</b></div><button class="btn sm secondary">Settle</button></div>
+  <div class="tr mine"><div class="w num">You owe <b>Meera</b> <b class="owe">₹1,400</b></div><button class="btn sm secondary">Settle</button></div>
+  <div class="tr"><div class="w num"><b>Kabir</b> owes <b>Arjun</b> ₹9,000</div></div>
+ </div>
+ <div class="sec-h" style="margin-top:20px"><h2>Everyone</h2><span class="small muted">net on this tablet</span></div>
+ <div class="card">
+  <div class="mrow"><span class="av c1 " aria-hidden="true">Y</span><div class="n">You</div><div class="r"><small>owes</small><b class="num owe">₹5,800</b></div></div>
+  <div class="mrow"><span class="av c2 " aria-hidden="true">A</span><div class="n">Arjun<span>@arjun.k</span></div><div class="r"><small>is owed</small><b class="num owed">₹13,400</b></div></div>
+  <div class="mrow"><span class="av c3 " aria-hidden="true">M</span><div class="n">Meera<span>@meera</span></div><div class="r"><small>is owed</small><b class="num owed">₹1,400</b></div></div>
+  <div class="mrow"><span class="av c4 " aria-hidden="true">K</span><div class="n">Kabir<span>@kabir</span></div><div class="r"><small>owes</small><b class="num owe">₹9,000</b></div></div>
+ </div>
+</div>
+<div class="fade"></div><button class="fab"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Inscribe</button><nav class="tabbar" aria-label="Main"><a class="tb on" aria-current=page><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-tablet"/></svg></span>Tablets</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></span>Archive</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-seal"/></svg></span>Your seal</a></nav>
+</body></html>

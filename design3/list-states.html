@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=412, initial-scale=1, viewport-fit=cover">
+<title>Clay design3 · List states</title>
+<link rel="stylesheet" href="clay3.css">
+<style>
+.panel{position:relative;overflow:hidden;border-bottom:4px solid #2B241C;padding-top:22px}
+.cap{position:absolute;top:0;left:0;right:0;height:22px;background:#2B241C;color:#F5EFE4;font:600 11px/22px var(--sans);padding:0 12px;z-index:3}
+.ptr{height:48px;display:flex;align-items:center;justify-content:center;gap:8px;font:500 13px var(--sans);color:var(--ink2)}
+.spin{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--clay)}
+.new{background:linear-gradient(90deg,var(--clay-soft),var(--surface) 70%)}
+.saving{font:500 11px var(--sans);color:var(--ink2)}
+.load{height:48px;display:flex;align-items:center;justify-content:center;gap:10px;font:500 13px var(--sans);color:var(--ink2);background:var(--surface);border-bottom:1px solid var(--line)}
+.end{height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:400 12px var(--sans);color:var(--ink2)}
+.end b{font:500 15px var(--serif);color:var(--ink)}
+.err{height:64px;display:flex;align-items:center;gap:12px;padding:0 8px 0 16px;background:var(--surface);font:400 13px/1.35 var(--sans)}
+.panel .toast{position:absolute;bottom:10px}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-settle" viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="i-tablet" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
+<symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="i-bksp" viewBox="0 0 24 24"><path d="M9 6h10a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0119 18H9l-5.5-6z"/><path d="M12 10l4 4M16 10l-4 4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 010 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></symbol>
+<symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M18 8v6M15 11h6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 013-3h12l-3-3M20 13v2a3 3 0 01-3 3H5l3 3"/></symbol>
+<symbol id="i-simplify" viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</defs></svg>
+
+<div class="panel"><div class="cap">1 · Pull to refresh: 48 px slot opens above, list slides down</div>
+<div class="ptr"><span class="spin"></span>Checking for new inscriptions</div><div class="rows"><div class="row" role="listitem"><div class="date" aria-hidden="true"><b class="num">21</b><span>NOV</span></div><div class="d"><b>Dinner at Thalassa</b><span class="num">Meera paid ₹12,000</span></div><div class="r"><small>you owe</small><b class="num owe">₹3,000</b></div></div></div></div><div class="panel"><div class="cap">2 · Optimistic add: row is in before the server answers</div>
+<div class="month"><b>November 2026</b><button class="r num" aria-label="Jump to a month">₹59,400 · 24<svg class="ic s" aria-hidden="true"><use href="#i-down"/></svg></button></div><div class="rows"><div class="row new" role="listitem"><div class="date"><b class="num">21</b><span>NOV</span></div><div class="d"><b>Breakfast</b><span class="num">You paid ₹2,400 · <span class="saving">saving…</span></span></div><div class="r"><small>you lent</small><b class="num owed">₹1,800</b></div></div></div>
+<div style="height:68px"></div><div class="toast" role="status" style="bottom:8px">Inscribed · Breakfast ₹2,400<button class="u">Undo</button></div></div><div class="panel"><div class="cap">3 · Next page: fetched 15 rows early; loading row is 48 px</div>
+<div class="rows"><div class="row" role="listitem"><div class="date" aria-hidden="true"><b class="num">02</b><span>OCT</span></div><div class="d"><b>Gas cylinder</b><span class="num">Arjun paid ₹1,050</span></div><div class="r"><small>you owe</small><b class="num owe">₹350</b></div></div></div>
+<div class="load"><span class="spin"></span>Loading September…</div></div><div class="panel"><div class="cap">4 · End of list: a stamp, not an endless spinner</div>
+<div class="rows"><div class="row" role="listitem"><div class="date" aria-hidden="true"><b class="num">03</b><span>JUN</span></div><div class="d"><b>Deposit share</b><span class="num">Kabir paid ₹90,000</span></div><div class="r"><small>you owe</small><b class="num owe">₹30,000</b></div></div></div>
+<div class="end"><b>The first inscription</b><span class="num">Flat 4B began 3 Jun 2024 · 1,240 inscriptions</span></div></div><div class="panel"><div class="cap">5 · Page failed: inline Retry; loaded rows stay</div>
+<div class="rows"><div class="row" role="listitem"><div class="date" aria-hidden="true"><b class="num">02</b><span>OCT</span></div><div class="d"><b>Gas cylinder</b><span class="num">Arjun paid ₹1,050</span></div><div class="r"><small>you owe</small><b class="num owe">₹350</b></div></div></div>
+<div class="err"><span class="owe"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg></span><div style="flex:1">Couldn't load September. You're offline or the server is slow.</div><button class="btn sm secondary"><svg class="ic s" aria-hidden="true"><use href="#i-refresh"/></svg>Retry</button></div></div>
+</body></html>
