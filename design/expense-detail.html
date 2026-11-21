@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5EFE4">
+<title>Clay · Expense detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5EFE4; --surface:#FFFDF8; --sunk:#EDE4D5; --line:#E3D8C6;
+  --ink:#221C15; --ink2:#62554A; --ink3:#6F6055;
+  --clay:#A94A24; --clay-deep:#8A3B1C; --clay-soft:#F4E3D7;
+  --lapis:#1E4C8A; --lapis-soft:#E3EAF4; --bar:#5B79A3;
+  --owe:#A33224; --owe-soft:#F6E1DC; --owed:#2E6B3C; --owed-soft:#E2EEDF;
+  --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --sh-1:0 1px 2px rgba(60,40,20,.06),0 2px 8px rgba(60,40,20,.05);
+  --sh-2:0 8px 24px rgba(60,40,20,.12),0 2px 6px rgba(60,40,20,.08);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  --safe-bot:max(env(safe-area-inset-bottom),16px);
+  --fast:120ms; --med:220ms; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E9E0D0;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{max-width:412px;margin:0 auto}
+.num{font-variant-numeric:tabular-nums lining-nums}
+svg{display:block;flex:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--lapis);outline-offset:2px}
+a{color:var(--lapis)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* storyboard caption between phone frames */
+.cap{background:var(--ink);color:#F5EFE4;padding:10px 16px;font:500 13px/1.4 var(--sans)}
+.cap b{font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#F0B89A;margin-right:8px}
+.frame{position:relative;background:var(--bg);min-height:880px;overflow:hidden}
+.frame.short{min-height:0}
+
+.status{height:36px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;font:600 13px var(--sans)}
+.status .r{display:flex;gap:6px;align-items:center}
+.head{padding:0 16px 12px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:48px}
+.iconbtn{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:var(--ink)}
+.iconbtn.ghost{background:var(--surface);box-shadow:var(--sh-1)}
+.iconbtn:active{background:var(--sunk)}
+.eyebrow{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--clay)}
+h1{font:500 32px/1.05 var(--serif);font-variation-settings:'opsz' 72;letter-spacing:-.01em}
+h1.big{font-size:40px}
+.meta{margin-top:6px;font:400 13px var(--sans);color:var(--ink2)}
+main{padding:0 16px 150px}
+.sec{margin-top:20px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 10px}
+.sec-h h2{font:500 20px var(--serif);font-variation-settings:'opsz' 36}
+.sec-h .lnk{font:600 13px var(--sans);color:var(--lapis);text-decoration:none;min-height:44px;display:flex;align-items:center}
+.card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-1);border:1px solid var(--line);overflow:hidden}
+.pad{padding:14px 16px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);min-height:56px}
+.row:last-child{border-bottom:0}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font:600 15px var(--sans)}
+.row .t span{display:block;font:400 13px/1.4 var(--sans);color:var(--ink2);margin-top:2px}
+.row .v{text-align:right;flex:none}
+.row .v small{display:block;font:500 12px var(--sans);color:var(--ink2)}
+.row .v b{display:block;font:600 15px var(--sans);margin-top:2px}
+.owe{color:var(--owe)} .owed{color:var(--owed)} .even{color:var(--ink2)}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:600 14px var(--sans);color:#fff;flex:none}
+.av.sm{width:28px;height:28px;font-size:12px}
+.av.gone{background:#fff!important;color:var(--ink3);border:1.5px dashed var(--ink3)}
+.c1{background:#1E4C8A}.c2{background:#A94A24}.c3{background:#2E6B3C}.c4{background:#6B4E8A}.c5{background:#7A5A1E}.c6{background:#4F6B6B}
+.chip{display:inline-flex;align-items:center;gap:4px;font:500 12px var(--sans);color:var(--ink2);background:var(--sunk);padding:3px 8px;border-radius:8px;white-space:nowrap}
+.row .t .chips,.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.row .t .chip{display:inline-flex;margin-top:0;color:var(--ink2)}
+.pill{font:600 11px var(--sans);color:var(--clay-deep);background:var(--clay-soft);padding:3px 8px;border-radius:8px;white-space:nowrap}
+.pill.lap{color:var(--lapis);background:var(--lapis-soft)}
+.pill.grey{color:var(--ink2);background:var(--sunk)}
+
+.btn{height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--sans);padding:0 18px;transition:transform var(--fast) var(--ease),background var(--fast)}
+.btn:active{transform:scale(.98)}
+.btn.full{width:100%}
+.btn-primary{background:var(--clay);color:#fff;box-shadow:0 2px 6px rgba(169,74,36,.3)}
+.btn-primary:active{background:var(--clay-deep)}
+.btn-secondary{background:var(--lapis-soft);color:var(--lapis)}
+.btn-quiet{color:var(--ink);background:var(--sunk)}
+.btn-danger{background:var(--owe);color:#fff}
+.btn-danger-quiet{color:var(--owe);background:transparent}
+.btn[disabled],.btn[aria-disabled=true]{background:var(--sunk);color:#9A8B7C;box-shadow:none;cursor:not-allowed}
+.btns{display:flex;gap:10px;margin-top:12px}.btns>.btn{flex:1}
+.dlg .btns>.btn,.sheet .btns>.btn{flex:none}
+.row .t .pill,.share .nm .pill{display:inline-block;margin-top:0;vertical-align:1px}
+
+.fab{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(76px + var(--safe-bot));height:52px;padding:0 22px 0 18px;border-radius:26px;background:var(--clay);color:#fff;font:600 15px var(--sans);display:flex;align-items:center;gap:8px;box-shadow:var(--sh-2),0 6px 18px rgba(169,74,36,.35);z-index:5;white-space:nowrap}
+.tabs{position:absolute;left:0;right:0;bottom:0;padding:8px 24px var(--safe-bot);background:rgba(255,253,248,.95);border-top:1px solid var(--line);display:flex;justify-content:space-around;z-index:4}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font:600 12px var(--sans);color:var(--ink2);width:88px;padding-top:4px;text-decoration:none}
+.tab[aria-current=page]{color:var(--clay)}
+.tab .ic{height:30px;width:56px;border-radius:15px;display:grid;place-items:center}
+.tab[aria-current=page] .ic{background:var(--clay-soft)}
+.fade{position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(rgba(245,239,228,0),var(--bg) 55%);z-index:3;pointer-events:none}
+
+/* sheets & dialogs */
+.scrim{position:absolute;inset:0;background:rgba(34,28,21,.5);z-index:10}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:24px 24px 0 0;z-index:11;padding:8px 20px calc(var(--safe-bot) + 8px);box-shadow:0 -8px 30px rgba(34,28,21,.2)}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.sheet h2,.dlg h2{font:500 24px/1.15 var(--serif);font-variation-settings:'opsz' 48}
+.sheet p.lead,.dlg p{font:400 15px/1.5 var(--sans);color:var(--ink2);margin-top:8px}
+.sheet-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.close{width:44px;height:44px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;flex:none}
+.dlg{position:absolute;left:20px;right:20px;top:50%;transform:translateY(-50%);background:var(--surface);border-radius:24px;padding:22px 20px 16px;z-index:11;box-shadow:var(--sh-2)}
+.dlg .btns{flex-direction:column;margin-top:18px}
+.ico-badge{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:12px}
+.ico-badge.warn{background:var(--owe-soft);color:var(--owe)}
+.ico-badge.ok{background:var(--owed-soft);color:var(--owed)}
+.ico-badge.lap{background:var(--lapis-soft);color:var(--lapis)}
+.note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--sunk);font:400 14px/1.45 var(--sans);color:var(--ink)}
+.note.lap{background:var(--lapis-soft)}
+.note.warn{background:var(--owe-soft)}
+.note svg{margin-top:1px}
+.toast{position:absolute;left:16px;right:16px;bottom:calc(80px + var(--safe-bot));background:var(--ink);color:#F5EFE4;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;font:500 14px var(--sans);z-index:6;box-shadow:var(--sh-2)}
+.toast button{margin-left:auto;color:#F0B89A;font-weight:600;min-height:44px;padding:0 4px}
+
+/* segmented control */
+.seg{width:100%;display:flex;background:var(--sunk);border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;height:38px;border-radius:10px;font:600 14px var(--sans);color:var(--ink2)}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+
+/* totals */
+.tot{padding:16px}
+.tot .k{font:500 13px var(--sans);color:var(--ink2)}
+.tot .big{font:500 34px/1.1 var(--serif);font-variation-settings:'opsz' 96;letter-spacing:-.01em;margin-top:2px}
+.tot .big small{font:500 15px var(--sans);color:var(--ink);margin-left:6px}
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.split2>div{background:var(--bg);border-radius:12px;padding:10px 12px}
+.split2 .k{font-size:12px}
+.split2 b{display:block;font:600 18px var(--sans);margin-top:2px}
+.cur-tabs{display:flex;gap:6px;margin-bottom:12px}
+.cur-tabs button{height:36px;padding:0 12px;border-radius:10px;font:600 13px var(--sans);color:var(--ink2);background:var(--sunk);display:flex;align-items:center;gap:6px}
+.cur-tabs button[aria-pressed=true]{background:var(--ink);color:#FFFDF8}
+.othercur{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font:400 14px var(--sans);color:var(--ink2)}
+.othercur b{font-weight:600}
+
+/* chart */
+.chart{position:relative;padding:4px 0 0}
+.plot{position:relative;display:flex;align-items:flex-end;gap:0;margin-right:34px}
+.grid{position:absolute;left:0;right:-34px;height:0;border-top:1px dashed #E3D8C6}
+.grid span{position:absolute;right:0;top:-8px;font:500 11px var(--sans);color:var(--ink3);background:var(--surface);padding-left:4px}
+.grid.base{border-top:1px solid #CDBEA8}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;border-radius:6px}
+.col .bar{width:62%;max-width:20px;background:var(--bar);border-radius:4px 4px 1px 1px;min-height:3px}
+.col .bar.zero{background:none;border-top:2px dotted var(--ink3);border-radius:0;min-height:0;height:0!important}
+.col[aria-pressed=true] .bar{background:var(--clay)}
+.col[aria-pressed=true]{background:rgba(169,74,36,.06)}
+.col .vl{position:absolute;font:600 11px var(--sans);color:var(--ink);white-space:nowrap}
+.xax{display:flex;margin-right:34px;margin-top:6px}
+.xax span{flex:1;text-align:center;font:500 11px/1.25 var(--sans);color:var(--ink3)}
+.xax span.on{color:var(--clay);font-weight:700}.xax u{text-underline-offset:3px;text-decoration-thickness:2px}
+.xax span i{display:block;font-style:normal;font-weight:600;color:var(--ink2)}
+.tip{position:absolute;z-index:2;background:var(--ink);color:#FFFDF8;border-radius:10px;padding:6px 10px;font:500 12px/1.35 var(--sans);white-space:nowrap;box-shadow:var(--sh-2)}
+.tip b{font:600 14px var(--sans);display:block}
+.tip::after{content:"";position:absolute;bottom:-5px;left:50%;width:10px;height:10px;background:var(--ink);transform:translateX(-50%) rotate(45deg)}
+.tip.mid{left:50%;transform:translateX(-50%)}.tip.start{left:0}.tip.end{right:0}
+.tip.start::after{left:8px;transform:rotate(45deg)}.tip.end::after{left:auto;right:8px;transform:rotate(45deg)}
+.chart-sum{font:400 13px/1.45 var(--sans);color:var(--ink2);margin-top:10px}
+.chart-sum b{color:var(--ink);font-weight:600}
+.chart-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.stepper{display:flex;gap:4px}
+.stepper button{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--ink);background:var(--bg)}
+.stepper button[disabled]{color:#B4A694}
+.legend{display:flex;gap:14px;font:500 12px var(--sans);color:var(--ink2);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.empty{padding:28px 20px;text-align:center}
+.empty h3{font:500 20px var(--serif);margin-top:10px}
+.empty p{font:400 14px/1.5 var(--sans);color:var(--ink2);margin-top:6px}
+.empty .ico-badge{margin:0 auto}
+table.data{width:100%;border-collapse:collapse;font:400 14px var(--sans)}
+table.data th{font:600 12px var(--sans);color:var(--ink2);text-align:left;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--bg)}
+table.data td{padding:10px 16px;border-bottom:1px solid var(--line)}
+table.data td.r,table.data th.r{text-align:right}
+table.data tr.on td{background:var(--clay-soft);font-weight:600}
+
+/* search */
+.field{display:flex;align-items:center;gap:10px;height:52px;border-radius:14px;background:var(--bg);border:1.5px solid var(--line);padding:0 8px 0 14px}
+.field.focus{border-color:var(--lapis);box-shadow:0 0 0 3px rgba(30,76,138,.15)}
+.field input{flex:1;border:0;background:none;font:400 17px var(--sans);color:var(--ink);outline:none;min-width:0}
+.field .caret{width:2px;height:22px;background:var(--lapis);margin-left:-8px}
+.label{font:600 13px var(--sans);color:var(--ink2);margin:14px 2px 6px;display:block}
+.help{font:400 13px/1.4 var(--sans);color:var(--ink2);margin:6px 2px 0}
+mark{background:none;color:var(--ink);font-weight:700;text-decoration:underline;text-decoration-color:var(--clay);text-underline-offset:3px}
+.result{display:flex;align-items:center;gap:12px;padding:8px 4px;min-height:60px;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.result:last-child{border-bottom:0}
+.result .t{flex:1;min-width:0}
+.result .t b{display:block;font:500 16px var(--sans)}
+.result .t span{display:block;font:400 13px var(--sans);color:var(--ink2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.result .act{height:36px;padding:0 14px;border-radius:10px;font:600 14px var(--sans);background:var(--lapis-soft);color:var(--lapis);display:flex;align-items:center;gap:4px}
+.result[aria-disabled=true] .t b{color:var(--ink2)}
+.group-h{font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:16px 4px 2px}
+.kbd{position:absolute;left:0;right:0;bottom:0;height:282px;background:#D8D2C9;padding:8px 4px 24px;z-index:12;display:flex;flex-direction:column;gap:9px}
+.kbd .sug{display:flex;justify-content:space-around;font:500 15px var(--sans);color:#3A332B;height:30px;align-items:center;border-bottom:1px solid #C9C1B5;margin:-2px 0 2px}
+.kbd .kr{display:flex;gap:5px;justify-content:center}
+.kbd .kr span{height:44px;flex:0 0 35px;background:#F6F3EE;border-radius:6px;display:grid;place-items:center;font:400 19px var(--sans);color:#2A241D;box-shadow:0 1px 0 #A89F92}
+.kbd .kr span.w{flex:0 0 52px;background:#C2BAAD;font-size:13px}
+.kbd .kr span.sp{flex:0 0 180px}
+.kbd .kr span.go{flex:0 0 72px;background:var(--lapis);color:#fff;font-size:14px;font-weight:600}
+
+/* breakdown */
+.eq{padding:4px 16px 12px}
+.eq .ln{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px dashed var(--line);font:400 15px var(--sans)}
+.eq .ln .op{display:inline-block;width:18px;font-weight:700;color:var(--ink2)}
+.eq .ln span.d{color:var(--ink2);font-size:13px;display:block;margin-left:18px;margin-top:2px}
+.eq .ln.tot{border-bottom:0;border-top:2px solid var(--ink);margin-top:4px;padding-top:12px;font:600 16px var(--sans)}
+.eq .ln b{font-weight:600;white-space:nowrap}
+.share{display:grid;grid-template-columns:auto 1fr auto auto;gap:4px 12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+.share:last-child{border-bottom:0}
+.share .nm{font:600 15px var(--sans)}
+.share .nm span{display:block;font:400 13px var(--sans);color:var(--ink2)}
+.share .c{font:500 14px var(--sans);text-align:right;color:var(--ink2);min-width:64px}
+.share .c b{display:block;font:600 15px var(--sans)}
+.colh{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;padding:10px 16px 6px;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
+.colh span{text-align:right;min-width:64px}
+.amount-hero{font:500 44px/1 var(--serif);font-variation-settings:'opsz' 96;letter-spacing:-.01em}
+.lock{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--sans);color:var(--ink2);background:var(--sunk);padding:5px 10px;border-radius:999px}
+.archive-row{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);align-items:flex-start}
+.archive-row:last-child{border-bottom:0}
+.archive-row .ev{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--sunk);color:var(--ink2)}
+.archive-row .t{flex:1;font:400 15px/1.4 var(--sans)}
+.archive-row .t span{display:block;font:400 13px var(--sans);color:var(--ink3);margin-top:2px}
+.day{font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:18px 4px 8px}
+.mini{display:flex;align-items:flex-end;gap:3px;height:36px;width:120px}
+.mini i{flex:1;background:var(--bar);border-radius:2px 2px 0 0;min-height:2px}
+.mini i.on{background:var(--clay)}
+.mini i.z{background:none;border-top:2px dotted var(--ink3);min-height:0}
+</style>
+</head>
+<body>
+<div class="cap" style="background:#A94A24"><b style="color:#fff">Clay · design2</b>Flow 5: read-only expense breakdown and "How we got this". &nbsp;<a href="index.html" style="color:#fff">All flows</a></div>
+<div class="cap" id="5A"><b>5A</b>Expense detail (read-only first): payer, shares, net effect per person</div>
+<section class="frame " aria-label="Expense detail (read-only first): payer, shares, net effect per person"><div class="status" aria-hidden="true"><span class="num">9:41</span><span class="r">
+<svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
+<svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div><header class="head"><div class="nav"><button class="iconbtn ghost" aria-label="Back to Goa Trip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="iconbtn ghost" aria-label="More actions"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/></svg></button></div>
+<div class="eyebrow">Inscription · 14 Nov 2026</div><h1 style="margin-top:6px">Dinner at Thalassa</h1>
+<div class="amount-hero num" style="margin-top:12px">₹12,000</div>
+<div class="meta">Paid by <b style="color:var(--ink)">Meera</b> · split equally, 4 ways · added by Meera</div></header>
+<main>
+<section class="card" aria-label="Who paid and who owes">
+<div class="colh"><span style="width:28px"></span><span style="text-align:left">Person</span><span>Paid</span><span>Effect</span></div>
+<div class="share"><span class="av c3 sm">M</span><span class="nm">Meera<span>share ₹3,000</span></span><span class="c num">₹12,000</span><span class="c num"><b class="owed">+₹9,000</b></span></div>
+<div class="share"><span class="av c1 sm">Y</span><span class="nm">You<span>share ₹3,000</span></span><span class="c num">₹0</span><span class="c num"><b class="owe">−₹3,000</b></span></div>
+<div class="share"><span class="av c2 sm">A</span><span class="nm">Arjun<span>share ₹3,000</span></span><span class="c num">₹0</span><span class="c num"><b class="owe">−₹3,000</b></span></div>
+<div class="share"><span class="av c4 sm">K</span><span class="nm">Kabir<span>share ₹3,000</span></span><span class="c num">₹0</span><span class="c num"><b class="owe">−₹3,000</b></span></div>
+</section>
+<div class="note lap" style="margin-top:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span><b>+</b> means the group owes them, <b>−</b> means they owe the group. Effects always add up to ₹0.</span></div>
+<div class="sec"><div class="card row"><span class="t"><b>Your part</b><span class="num">You owe Meera ₹3,000 for this</span></span><span class="v"><b class="owe num">₹3,000</b></span></div></div>
+<div class="btns" style="margin-top:16px"><button class="btn btn-secondary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Edit</button><button class="btn btn-danger-quiet"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Delete</button></div>
+</main>
+<nav class="tabs" aria-label="Main"><a class="tab" href="#" aria-current="page"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3.5"/><path d="M9 8l2 .7-2 .7M13 8l2 .7-2 .7M9 13l2 .7-2 .7"/></svg></span>Tablets</a><a class="tab" href="#"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h18M5 6.5V18a2 2 0 002 2h10a2 2 0 002-2V6.5"/><path d="M4 3.5h16v3H4zM10 11h4"/></svg></span>Archive</a><a class="tab" href="#"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="13" rx="2.5"/><path d="M7 7h10M7 12h10M5 21h14M12 16v5"/></svg></span>Your seal</a></nav></section>
+<div class="cap" id="5B"><b>5B</b>"How we got this": paid − shares + sent − received = standing</div>
+<section class="frame " aria-label=""How we got this": paid − shares + sent − received = standing"><div class="status" aria-hidden="true"><span class="num">9:41</span><span class="r">
+<svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
+<svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div><header class="head"><div class="nav"><button class="iconbtn ghost" aria-label="Back to Goa Trip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><span></span></div><div class="eyebrow">Goa Trip · your standing</div><h1 style="margin-top:6px">How we got this</h1><div class="meta">Every entry you're part of, added up.</div></header>
+<main>
+<section class="card"><div class="eq">
+<div class="ln"><span><span class="op">+</span>You paid<span class="d">1 entry: Scooter rentals</span></span><b class="num">₹4,800</b></div>
+<div class="ln"><span><span class="op">−</span>Your shares<span class="d">4 entries you're split into</span></span><b class="num">₹10,600</b></div>
+<div class="ln"><span><span class="op">+</span>Payments you sent<span class="d">none yet</span></span><b class="num">₹0</b></div>
+<div class="ln"><span><span class="op">−</span>Payments you received<span class="d">none yet</span></span><b class="num">₹0</b></div>
+<div class="ln tot"><span>Your standing</span><b class="owe num">−₹5,800 · you owe</b></div>
+</div></section>
+<div class="sec"><div class="sec-h"><h2>Your shares</h2></div>
+<div class="card">
+<div class="row"><span class="t"><b>Villa, 3 nights</b><span>12 Nov · Arjun paid ₹24,000</span></span><span class="v"><b class="num">₹6,000</b></span></div>
+<div class="row"><span class="t"><b>Dinner at Thalassa</b><span>14 Nov · Meera paid ₹12,000</span></span><span class="v"><b class="num">₹3,000</b></span></div>
+<div class="row"><span class="t"><b>Scooter rentals</b><span>13 Nov · you paid ₹4,800</span></span><span class="v"><b class="num">₹1,200</b></span></div>
+<div class="row"><span class="t"><b>Fuel</b><span>13 Nov · Kabir paid ₹1,600</span></span><span class="v"><b class="num">₹400</b></span></div>
+</div></div>
+<div class="help" style="margin:10px 4px">Who you pay comes from Hammurabi's shortcut (simplify debts); the total stays ₹5,800.</div>
+</main>
+<nav class="tabs" aria-label="Main"><a class="tab" href="#" aria-current="page"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3.5"/><path d="M9 8l2 .7-2 .7M13 8l2 .7-2 .7M9 13l2 .7-2 .7"/></svg></span>Tablets</a><a class="tab" href="#"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h18M5 6.5V18a2 2 0 002 2h10a2 2 0 002-2V6.5"/><path d="M4 3.5h16v3H4zM10 11h4"/></svg></span>Archive</a><a class="tab" href="#"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="13" rx="2.5"/><path d="M7 7h10M7 12h10M5 21h14M12 16v5"/></svg></span>Your seal</a></nav></section>
+
+</body>
+</html>
