@@ -4,13 +4,6 @@
 <title>Clay design3 · Settle</title>
 <link rel="stylesheet" href="clay3.css">
 <style>
-.ghead{padding:0 16px 12px}
-.gt{display:flex;align-items:flex-end;justify-content:space-between}
-.stand{margin-top:12px;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
-.stand small{display:block;font:500 12px var(--sans);color:var(--ink2)}
-.stand b{display:block;font:500 22px/1.1 var(--serif);margin-top:2px}
-.stand b span{font:500 13px var(--sans);color:var(--ink)}
-
 .opt{display:flex;align-items:center;gap:12px;height:64px;padding:0 14px;border-radius:16px;background:var(--surface);border:1.5px solid var(--line);margin:0 16px 8px}
 .opt.on{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-soft)}
 .opt .w{flex:1;font:400 15px var(--sans)}.opt .w b{font-weight:600}
@@ -32,7 +25,7 @@
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
 <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
 <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
-<symbol id="i-tablet" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-group" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
 <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
 <symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
 <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
@@ -54,12 +47,12 @@
 <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="st" style="height:640px">
  <div class="grab"></div>
  <div class="sh-head"><div><div class="eyebrow">Goa Trip</div><h2 id="st" style="font-size:24px;margin-top:4px">Settle up</h2></div><button class="close" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
- <div class="opt on" role="radio" aria-checked="true"><span class="radio"></span><div class="w num">You pay <b>Arjun</b></div><b class="num owe">₹4,400</b></div>
- <div class="opt" role="radio" aria-checked="false"><span class="radio"></span><div class="w num">You pay <b>Meera</b></div><b class="num owe">₹1,400</b></div>
- <div class="flow"><span class="av c1 lg" aria-hidden="true">Y</span><svg class="ic l arr" aria-hidden="true"><use href="#i-right"/></svg><span class="av c2 lg" aria-hidden="true">A</span></div>
- <div class="bigamt num">₹4,400</div>
+ <div class="opt on" role="radio" aria-checked="true"><span class="radio"></span><div class="w num">You pay <b>Arjun</b></div><b class="num owe">₹3,000</b></div>
+ <div class="opt" role="radio" aria-checked="false"><span class="radio"></span><div class="w num">You pay <b>Meera</b></div><b class="num owe">₹2,800</b></div>
+ <div class="flow"><span class="av c1 lg" aria-hidden="true">AP</span><svg class="ic l arr" aria-hidden="true"><use href="#i-right"/></svg><span class="av c2 lg" aria-hidden="true">AK</span></div>
+ <div class="bigamt num">₹3,000</div>
  <button class="edit">Paying part of it? Change amount</button>
- <div style="padding:8px 16px 0"><button class="btn primary block"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Record ₹4,400 to Arjun</button></div>
- <p class="foot">Clay only writes it down. Pay Arjun the way you usually do, then record it here. Dated today; you can undo for 5 seconds.</p>
+ <div style="padding:8px 16px 0"><button class="btn primary block"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Record ₹3,000 to Arjun</button></div>
+ <p class="foot">Clay only records it. Pay Arjun the way you usually do. You can undo for 5 seconds.</p>
 </section>
 </body></html>

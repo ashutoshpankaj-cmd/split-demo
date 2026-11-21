@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=412, initial-scale=1, viewport-fit=cover">
+<title>Clay design3 · Settle with a friend</title>
+<link rel="stylesheet" href="clay3.css">
+<style>
+.opt{display:flex;align-items:center;gap:12px;height:64px;padding:0 14px;border-radius:16px;background:var(--surface);border:1.5px solid var(--line);margin:0 16px 8px}
+.opt.on{border-color:var(--clay);box-shadow:0 0 0 3px var(--clay-soft)}
+.opt .w{flex:1;font:400 15px var(--sans)}.opt .w b{font-weight:600}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--ink3);flex:none}
+.opt.on .radio{border:7px solid var(--clay)}
+.flow{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 4px}
+.flow .arr{color:var(--ink3)}
+.bigamt{text-align:center;font:500 48px/1.1 var(--serif)}
+.edit{display:block;margin:4px auto 0;height:44px;color:var(--lapis);font:600 14px var(--sans)}
+.foot{font:400 13px/1.45 var(--sans);color:var(--ink2);text-align:center;padding:10px 28px 0}
+
+.bd{margin:12px 16px 0;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.bd .h{font:600 12px var(--sans);color:var(--ink2);padding:12px 16px 4px}
+.bl{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;border-top:1px solid var(--line)}
+.bl .gi{width:32px;height:32px;border-radius:10px;background:var(--sunk);display:grid;place-items:center;font:500 15px var(--serif);flex:none}
+.bl .w{flex:1;font:400 14px var(--sans)}.bl .w b{font-weight:600}.bl .w span{display:block;font:400 12px var(--sans);color:var(--ink2)}
+.bl .v{font:600 14px var(--sans)}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-settle" viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="i-group" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
+<symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="i-bksp" viewBox="0 0 24 24"><path d="M9 6h10a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0119 18H9l-5.5-6z"/><path d="M12 10l4 4M16 10l-4 4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 010 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></symbol>
+<symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M18 8v6M15 11h6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 013-3h12l-3-3M20 13v2a3 3 0 01-3 3H5l3 3"/></symbol>
+<symbol id="i-simplify" viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</defs></svg>
+<div class="status"><span class="num">9:41</span><span style="display:flex;gap:6px;align-items:center">
+<svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
+<svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div>
+<div class="nav"><button class="iconbtn ghost"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button></div>
+<div style="padding:0 16px"><h1>Arjun Kapoor</h1></div>
+<div class="scrim"></div>
+<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sf" style="height:690px">
+ <div class="grab"></div>
+ <div class="sh-head"><div><div class="eyebrow">All groups with Arjun</div><h2 id="sf" style="font-size:24px;margin-top:4px">Settle up with Arjun</h2></div><button class="close" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+ <div class="flow" style="margin-top:6px"><span class="av c1 lg" aria-hidden="true">AP</span><svg class="ic l arr" aria-hidden="true"><use href="#i-right"/></svg><span class="av c2 lg" aria-hidden="true">AK</span></div>
+ <div class="bigamt num">₹1,450</div>
+ <p class="foot" style="padding-top:2px">You pay Arjun ₹1,450 and you're square in every group.</p>
+ <div class="bd"><div class="h">Clay records one payment per group</div>
+  <div class="bl"><span class="gi">G</span><div class="w num"><b>Goa Trip</b><span>You paid Arjun</span></div><b class="v num">₹3,000</b></div>
+  <div class="bl"><span class="gi">F</span><div class="w num"><b>Flat 4B</b><span>Arjun paid you</span></div><b class="v num">₹1,550</b></div>
+ </div>
+ <div style="padding:16px 16px 0"><button class="btn primary block"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Record ₹1,450 to Arjun</button></div>
+ <p class="foot">Clay only records it. Paying part of it? Settle inside one group instead. Undo for 5 seconds.</p>
+</section>
+</body></html>

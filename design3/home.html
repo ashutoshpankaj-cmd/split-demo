@@ -22,7 +22,8 @@
 .prow{height:60px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--line)}
 .prow .d{flex:1}.prow .d b{font:600 15px var(--sans)}.prow .d span{display:block;font:400 12px var(--sans);color:var(--ink2);margin-top:2px}
 .prow .r{text-align:right}.prow .r small{display:block;font:500 11px var(--sans);color:var(--ink2)}.prow .r b{font:600 15px var(--sans)}
-.more{height:48px;display:flex;align-items:center;justify-content:center;font:500 13px var(--sans);color:var(--ink2)}
+.more{height:48px;display:flex;align-items:center;justify-content:center;gap:6px;font:500 13px var(--sans);color:var(--ink2);border-bottom:1px solid var(--line)}
+.endpad{height:150px}
 </style></head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
@@ -34,7 +35,7 @@
 <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
 <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
 <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
-<symbol id="i-tablet" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-group" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
 <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
 <symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
 <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
@@ -50,17 +51,17 @@
 <div class="status"><span class="num">9:41</span><span style="display:flex;gap:6px;align-items:center">
 <svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
 <svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div>
-
-<div class="hh"><h1>Tablets</h1><button class="iconbtn" aria-label="Search all tablets"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button></div>
+<div class="scroller" style="height:calc(100vh - 36px);overflow:hidden">
+<div class="hh"><h1>Groups</h1><button class="iconbtn" aria-label="Search all groups"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button></div>
 <section class="card hero" aria-label="Your total">
- <div class="l">Across all your tablets</div>
+ <div class="l">Across all your groups</div>
  <div class="big num owed">₹970<small>owed to you, net</small></div>
  <div class="tiles"><div class="tile"><small>You owe · 2 people</small><b class="num owe">₹4,250</b></div>
  <div class="tile"><small>Owed to you · 2 people</small><b class="num owed">₹5,220</b></div></div>
 </section>
-<div class="sh"><h2>Your tablets</h2><span class="small muted">latest first</span></div>
-<div class="rows" style="border-top:1px solid var(--line)"><a class="grow"><span class="gic" aria-hidden="true">G</span><div class="d"><b>Goa Trip</b><span class="num">Meera · Dinner at Thalassa ₹12,000 · 2h</span></div><div class="r"><small>you owe</small><b class="num owe">₹5,800</b></div></a><a class="grow"><span class="gic" aria-hidden="true">F</span><div class="d"><b>Flat 4B</b><span class="num">You · WiFi, November ₹1,199 · Mon</span></div><div class="r"><small>owed to you</small><b class="num owed">₹6,350</b></div></a><a class="grow"><span class="gic" aria-hidden="true">R</span><div class="d"><b>Riya &amp; me</b><span class="num">Riya · Zepto order ₹840 · yesterday</span></div><div class="r"><small>owed to you</small><b class="num owed">₹420</b></div></a></div>
-<div class="sh"><h2>People</h2><span class="small muted">who's not square</span></div>
-<div class="rows" style="border-top:1px solid var(--line)"><a class="prow"><span class="av c2 " aria-hidden="true">A</span><div class="d"><b>Arjun</b><span>Goa Trip · Flat 4B</span></div><div class="r"><small>you owe</small><b class="num owe">₹2,850</b></div></a><a class="prow"><span class="av c3 " aria-hidden="true">M</span><div class="d"><b>Meera</b><span>Goa Trip</span></div><div class="r"><small>you owe</small><b class="num owe">₹1,400</b></div></a><a class="prow"><span class="av c4 " aria-hidden="true">K</span><div class="d"><b>Kabir</b><span>Flat 4B · Goa Trip</span></div><div class="r"><small>owes you</small><b class="num owed">₹4,800</b></div></a><a class="prow"><span class="av c5 " aria-hidden="true">R</span><div class="d"><b>Riya</b><span>Riya &amp; me</span></div><div class="r"><small>owes you</small><b class="num owed">₹420</b></div></a><div class="more">+ 1 person all square</div></div>
-<div class="fade"></div><button class="fab"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Inscribe</button><nav class="tabbar" aria-label="Main"><a class="tb on" aria-current=page><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-tablet"/></svg></span>Tablets</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></span>Archive</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-seal"/></svg></span>Your seal</a></nav>
+<div class="sh"><h2>Your groups</h2><span class="small muted">latest first</span></div>
+<div class="rows" style="border-top:1px solid var(--line)"><a class="grow"><span class="gic" aria-hidden="true">G</span><div class="d"><b>Goa Trip</b><span class="num">Meera · Dinner at Thalassa ₹12,000 · 2h</span></div><div class="r"><small>you owe</small><b class="num owe">₹5,800</b></div></a><a class="grow"><span class="gic" aria-hidden="true">F</span><div class="d"><b>Flat 4B</b><span class="num">You · WiFi, November ₹1,199 · Mon</span></div><div class="r"><small>owed to you</small><b class="num owed">₹6,350</b></div></a><a class="grow"><span class="gic" aria-hidden="true">R</span><div class="d"><b>Riya &amp; you</b><span class="num">Riya · Zepto order ₹840 · yesterday</span></div><div class="r"><small>owed to you</small><b class="num owed">₹420</b></div></a></div>
+<div class="sh"><h2>Friends</h2><span class="small muted">not settled up</span></div>
+<div class="rows" style="border-top:1px solid var(--line)"><a class="prow"><span class="av c2 " aria-hidden="true">AK</span><div class="d"><b>Arjun Kapoor</b><span>Goa Trip · Flat 4B</span></div><div class="r"><small>you owe</small><b class="num owe">₹1,450</b></div></a><a class="prow"><span class="av c3 " aria-hidden="true">MI</span><div class="d"><b>Meera Iyer</b><span>Goa Trip</span></div><div class="r"><small>you owe</small><b class="num owe">₹2,800</b></div></a><a class="prow"><span class="av c4 " aria-hidden="true">KS</span><div class="d"><b>Kabir Shah</b><span>Flat 4B · Goa Trip</span></div><div class="r"><small>owes you</small><b class="num owed">₹4,800</b></div></a><a class="prow"><span class="av c5 " aria-hidden="true">RS</span><div class="d"><b>Riya Sen</b><span>Riya &amp; you</span></div><div class="r"><small>owes you</small><b class="num owed">₹420</b></div></a></div><div class="endpad"></div></div>
+<div class="fade"></div><button class="fab"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add expense</button><nav class="tabbar" aria-label="Main"><a class="tb on" aria-current=page><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-group"/></svg></span>Groups</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></span>Activity</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-seal"/></svg></span>Profile</a></nav>
 </body></html>

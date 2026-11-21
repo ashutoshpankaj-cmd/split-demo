@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=412, initial-scale=1, viewport-fit=cover">
+<title>Clay design3 · Join via invite</title>
+<link rel="stylesheet" href="clay3.css">
+<style>
+.jh{padding:28px 24px 0}
+.gcard{margin:18px 16px 0;padding:16px;display:flex;align-items:center;gap:14px}
+.gcard .gi{width:56px;height:56px;border-radius:16px;background:var(--sunk);display:grid;place-items:center;font:500 26px var(--serif)}
+.gcard b{font:500 22px var(--serif)}.gcard span{display:block;font:400 13px var(--sans);color:var(--ink2);margin-top:3px}
+form{padding:20px 16px 0}
+label{display:block;font:600 13px var(--sans);margin:12px 4px 6px}
+.in{height:52px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);display:flex;align-items:center;padding:0 14px;font:500 16px var(--sans)}
+.in.on{border-color:var(--lapis);box-shadow:0 0 0 3px var(--lapis-soft)}
+.help{font:400 12px var(--sans);color:var(--ink2);margin:6px 4px 0}
+.alt{text-align:center;margin-top:14px;font:500 14px var(--sans);color:var(--ink2)}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-settle" viewBox="0 0 24 24"><path d="M4 8h14l-3-3M20 16H6l3 3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="i-group" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8l2 1.5L9 11M13 13l2 1.5-2 1.5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><path d="M5 8.5V19a1 1 0 001 1h12a1 1 0 001-1V8.5M10 12.5h4"/></symbol>
+<symbol id="i-seal" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="11" rx="5"/><path d="M7 8.5h10M9 14v3h6v-3M6 21h12"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+<symbol id="i-bksp" viewBox="0 0 24 24"><path d="M9 6h10a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0119 18H9l-5.5-6z"/><path d="M12 10l4 4M16 10l-4 4"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 010 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></symbol>
+<symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M18 8v6M15 11h6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9a3 3 0 013-3h12l-3-3M20 13v2a3 3 0 01-3 3H5l3 3"/></symbol>
+<symbol id="i-simplify" viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+</defs></svg>
+<div class="status"><span class="num">9:41</span><span style="display:flex;gap:6px;align-items:center">
+<svg width="17" height="12" viewBox="0 0 17 12"><path d="M1 11h2V8H1zM5 11h2V6H5zM9 11h2V3.5H9zM13 11h2V1h-2z" fill="#221C15"/></svg>
+<svg width="24" height="12" viewBox="0 0 24 12"><rect x=".5" y=".5" width="20" height="11" rx="3" fill="none" stroke="#221C15" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#221C15"/></svg></span></div>
+<div class="jh"><div class="eyebrow">Clay · split expenses with friends</div>
+<h1 style="margin-top:10px;font-size:28px">Meera invited you to a group</h1></div>
+<section class="card gcard"><span class="gi">G</span><div><b>Goa Trip</b><span>Meera Iyer, Arjun, Kabir and you · 1 expense</span></div>
+<div class="faces" style="margin-left:auto"><span class="av c3 ring sm" aria-hidden="true">MI</span><span class="av c2 ring sm" aria-hidden="true">AK</span><span class="av c4 ring sm" aria-hidden="true">KS</span></div></section>
+<form aria-label="Create your account">
+<label for="n">Your name</label><div class="in on" id="n">Dev Mehta<span style="width:2px;height:20px;background:var(--lapis);margin-left:2px"></span></div>
+<p class="help">How friends see you. Initials go on your avatar.</p>
+<label for="u">Username</label><div class="in" id="u">dev.mehta</div>
+<p class="help">Suggested from your name. Lowercase letters, numbers and dots.</p>
+<label for="p">Password</label><div class="in" id="p" style="color:var(--ink3)">At least 10 characters</div>
+<div style="margin-top:18px"><button class="btn primary block" type="button">Join Goa Trip</button></div>
+<p class="alt">Already on Clay? <a class="link">Log in and join</a></p></form>
+</body></html>

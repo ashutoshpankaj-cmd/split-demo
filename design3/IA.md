@@ -1,209 +1,189 @@
 # Clay · design3 · Information architecture
 
-Ruled by `JOURNEYS.md`. The frequent jobs (add, glance, check a tablet, see who paid)
-get the screen. Occasional ones (settle, search, spending) are one tap away. Rare ones
-(members, rename, export, leave, theme) go behind a menu.
+Ruled by `JOURNEYS.md`. The frequent jobs (add, glance, check a group, see who paid) get
+the screen. Occasional ones (settle, search, spending) are one tap away. Rare ones
+(members, invite, name/icon, currency, export, leave, theme) go behind a menu.
 
-Clay vocabulary is unchanged: tablet = group, inscription = expense, name = member,
-Archive = activity, Your seal = account. Every string below is a theme key (`SPEC.md §9`),
-so the `classic` theme reads "Groups / Expenses / Add expense".
+**Words.** The default Clay theme uses plain words: **Groups, Add expense, Expenses,
+Balances, Spending, Activity, Profile, Simplify debts, Settle up, members**. The Clay
+look stays in the visuals: Fraunces headings, the palette, the clay-tablet illustration in
+empty states and on the "First expense" end stamp, and the small cuneiform texture
+behind headers. Every string is still a theme key (`SPEC.md §9`), so another theme can
+re-skin the words.
 
 ## 1. Map
 
 ```
-Tab bar (3, unchanged):  Tablets  ·  Archive  ·  Your seal
-                         ───────     ───────     ─────────
-Tablets (Home)           Archive               Your seal
- ├ hero: net + owe/owed  (all activity,        ├ Your spending (moved here from Home)
- ├ Your tablets          paginated, same       ├ Theme, account, sign out
- ├ People (not square)   cursor contract)      └ Install app
+Tab bar (3):   Groups  ·  Activity  ·  Profile
+               ──────     ────────     ───────
+Groups (Home)            Activity              Profile
+ ├ hero: net + owe/owed  (all activity,        ├ display name, username, avatar
+ ├ Your groups           cursor-paginated)     ├ Your spending (moved off Home)
+ ├ Friends (not settled)                       ├ Theme, sign out, install app
  ├ [Search all]
- └ [Inscribe] ──────────────────────────────▶ Add expense (full-screen sheet)
-      │
-Tablet  /g/:id  (header + 3 tabs; tab is in the URL)
- ├ Inscriptions  /g/:id          ← default
- ├ Balances      /g/:id/balances
- ├ Spending      /g/:id/spending
- ├ [Search]      /g/:id/search?q=
- ├ [⋯] Members · Add a name · Invite link · Rename · Export CSV · Leave
- ├ [Settle up]   sheet  /g/:id/settle
- ├ [Inscribe]    sheet  /g/:id/add
- └ row ▶ Expense detail sheet /g/:id/e/:eid  (read first, Edit secondary; design2)
+ └ [Add expense] ─────────────────────────────▶ Add expense (full-screen sheet)
 
-Person  /p/:uid   (from Home → People)
- ├ net across tablets, per currency
- ├ By tablet: balance + Settle each
- └ Recent with <name> (cursor list, all shared tablets)
+Group  /g/:id  (header + 3 tabs; the tab is in the URL)
+ ├ Expenses   /g/:id            ← default
+ ├ Balances   /g/:id/balances
+ ├ Spending   /g/:id/spending   (tap a bar → Expenses filtered to that period)
+ ├ [Search]   /g/:id/search?q=
+ ├ [⋯] Members and invite link · Name and icon · Currency · Simplify debts ·
+ │     Export as CSV · Leave group
+ ├ [Settle up] sheet   /g/:id/settle
+ ├ [Add expense] sheet /g/:id/add
+ └ row ▶ Expense sheet /g/:id/e/:eid  (read first; Edit, or for locked rows
+                                        "Add a correction")
 
-Join  /join/:token   (no auth) → sign up → /g/:id with the welcome card
+Friend  /p/:uid   (from Groups → Friends, or any avatar)
+ ├ net with them across groups (direct balances), per currency
+ ├ [Settle ₹X] → settle-all sheet (one record per group, behind the scenes)
+ ├ [Add expense] → add sheet preselecting your shared group (or your 1:1 group)
+ ├ By group: balance per group (tap → group)
+ └ Shared expenses (cursor list across shared groups)
+
+Join  /join/:token   (no auth) → one form (name, username, password) → /g/:id + welcome card
 ```
 
-The tab bar stays at 3. A separate People tab was considered and rejected: friends-and-
-family users have 3-10 people and 2-6 tablets, which fit on one Home screen, and a 4th tab
-would only split the glance job across two places.
+The tab bar stays at 3. Friends live on the Groups screen rather than a 4th tab:
+friends-and-family users have 3-10 friends and 2-6 groups, which fit on one screen, so a
+separate tab would split the glance job in two.
 
-## 2. Home (`home.html`)
+## 2. Groups (Home) · `home.html`
 
-Top to bottom, in priority order:
+1. **Title** `Groups` + search (across all groups).
+2. **Hero** (fixed 150px): net across groups in the selected currency, worded
+   (`owed to you, net` / `you owe overall` / `settled up`), plus two tiles
+   `You owe · 2 people` / `Owed to you · 2 people`. Amounts drop `.00` when there are no
+   paise (`₹13,425`).
+3. **Your groups**, sorted by **latest activity**. Each 72px row carries the last
+   expense (`Meera · Dinner at Thalassa ₹12,000 · 2h`) and your balance. A group you were
+   just added to shows `Arjun added you · 1m` and a 2 s highlight.
+4. **Friends** you're not settled with, largest first; the rest fold into `+ N settled
+   up`. Numbers are **direct (pairwise) balances**, so they only change when an expense
+   involves you and that friend. Tap → Friend page.
+5. **Add expense** button. It collapses to a 56px round button when you scroll down and
+   comes back when you scroll up. The list has bottom padding = tab bar + button + 24px,
+   so the last row's amount can always scroll clear of it (critic: it covered amounts and
+   Friends rows).
 
-1. **Title row**: `Tablets` + a search icon (global search across tablets, same result
-   rows with the tablet name in the subtitle).
-2. **Hero** (fixed 150px): net across all tablets in the selected currency, worded
-   (`owed to you, net` / `you owe overall` / `all square`), and two tiles
-   `You owe · 2 people` / `Owed to you · 2 people`. Multi-currency chips from design2 stay.
-   Amounts drop `.00` when the minor part is zero (`₹13,425`, not `₹13,425.00`).
-3. **Your tablets**: sorted by **latest activity**, not name. Each 72px row shows the
-   last inscription (`Meera · Dinner at Thalassa ₹12,000 · 2h`), which answers "did they
-   add it?" without opening the tablet. Your standing is on the right. Archived or
-   all-square tablets older than 60 days fold into `+ 3 quiet tablets`.
-4. **People**: only people you're not square with, largest first. The rest fold into
-   `+ N people all square`. Tap opens the Person view.
-5. **Inscribe** FAB: global add. It preselects the right tablet (`SPEC.md §4`).
+**Moved off Home:** the "Your spending" card, to Profile.
 
-**Moved off Home:** the "Your spending" card goes to Your seal. Monthly review is
-occasional, and it pushed People below the fold.
-
-## 3. Tablet screen: header + tabs
+## 3. Group screen
 
 ### Why tabs, and why these three
 
-The tablet screen answered four different questions in one scroll (standing, reckoning,
-chart, list), so the most frequent one (the list) came last. Tabs let each question own
-the full height:
-
-| Tab | Question | Frequency | Why it's a tab and not a section |
+| Tab | Question | Frequency | Why it's a tab |
 |---|---|---|---|
-| **Inscriptions** (default) | What was added, who paid | most visits | It's what people open a tablet for. It's an unbounded list, so it must own the scroll |
-| **Balances** | Who pays whom, everyone's net | settle time | The reckoning and simplify toggle are only needed when settling. Your own standing stays in the header, so the glance needs no tab switch |
-| **Spending** | How much, when, by whom | monthly | Charts are occasional and heavy. They load only when the tab opens |
+| **Expenses** (default) | What was added, who paid | most visits | It's the reason to open a group, and it's an unbounded list, so it must own the scroll. The first row moves from y=1,014 to y≈300 |
+| **Balances** | Who owes whom, everyone's net | settle time | Only needed when settling. Your own balance stays in the header, so the glance doesn't need a tab switch |
+| **Spending** | How much, when, by whom | monthly | Charts are occasional and heavy, so they load lazily |
 
-I considered **two tabs** (Inscriptions | Summary). That makes Balances + Spending one
-long scroll again, which brings back complaint #1 for settle-time visits. **Swipeable
-tabs** were rejected: a horizontal swipe on a list of tappable rows fights the browser's
-back-swipe on Android/iOS PWAs. Tabs change by tap only.
+Rejected: **two tabs** (Expenses | Summary), because it brings back the long scroll at
+settle time; and **swipe between tabs**, because it fights the back-swipe in PWAs.
 
-### Header (shared by all tabs, `group-*.html`)
+### Header (all tabs)
 
-- Nav: back · (space) · search · `⋯`.
-- Eyebrow `Tablet · 4 names`, title, faces (tap → Members, same as `⋯ → Members`).
-- **Standing strip** (fixed 56px): `Your standing ₹5,800 you owe` + `Settle up`. It's
-  the one number you need on every visit, and it was a 220px card before.
-- Tabs (44px), underlined, with a count on Inscriptions.
+Nav (back · search · `⋯`), eyebrow `Group · 4 members`, name, member faces (display-name
+initials, never "U"), then the **balance strip** (56px): `Your balance ₹5,800 you owe` +
+`Settle up`. Below that, the tabs (44px, underlined, with the expense count). On scroll,
+the title block and balance strip scroll away, the nav takes a small title, and the tabs
+and month header stick.
 
-On scroll, the title block and standing strip scroll away. The nav gets a small title,
-and the tabs **stick** under it (`SPEC.md §2.3`). The list gets the whole screen.
+### Expenses tab · `group-expenses.html`
 
-**Moved behind `⋯`:** Add a name (was a big button on every visit), Members, Invite link,
-Rename/icon, Export ledger (CSV), Leave tablet (last, red, separated). **"How we got
-this"** moves into the Balances tab header, next to the numbers it explains.
-
-### Inscriptions tab (`group-expenses.html`)
-
-- Expenses **and payments** in one chronological list (payments used to be a separate
-  section at the bottom). A payment row has the lapis settle icon and the label `payment`.
-- **Sticky month header** (40px): `November 2026 · ₹57,000 · 23 ▾`. Tap → Jump to a month.
-- Rows are 64px. The date column shows only on the first row of each day, so repeated
-  dates don't add noise. The subtitle carries who paid and the split exception (`· 3 of 4`).
+- Expenses **and payments** in one timeline (payments used to sit in a list at the bottom).
+- **Sticky month header with the year** (`November 2026 · ₹57,000 · 23 ▾`) → Jump to a month.
+- 64px rows. The date shows on the first row of each day. The subtitle says who paid
+  and, when not everyone is in, `· 3 people`.
+- **Locked rows** (they involve someone who left): a small dashed `Riya left` tag after
+  the title; no other change in the list (`SPEC.md §12`).
 - Paginated, 50 per page (`SPEC.md §6`).
 
-### Balances tab (`group-balances.html`)
+### Balances tab · `group-balances.html`
 
-- **Who pays whom**: Hammurabi's shortcut toggle (remembered per tablet), your rows first
-  with inline **Settle**, then others' rows. `How we got this` sits in the section header.
-- **Everyone**: every member's net on this tablet (doubles as the member list; former
-  members show with the dashed avatar and `Left`).
+- **Who owes whom**: direct balances by default, your rows first with inline `Settle up`.
+- **Simplify debts** (a per-group setting, default **off**). Its note says what it saves
+  and what it costs ("pairs can change when anyone adds an expense"). When it's on, each
+  of your rows gets a `Why Arjun?` disclosure listing the direct debts it replaces
+  (`SPEC.md §11`).
+- **Everyone**: each member's net in this group.
+- `How we got this` sits in the section header.
 
-### Spending tab (`group-spending.html`)
+### Spending tab · `group-spending.html`
 
-- Headline: tablet total · your share.
-- Chart with `Day | Week | Month`. The default comes from the tablet's span: under 21
-  days → Day, under 6 months → Week, else Month. The axis starts at the first
-  inscription (no empty pre-history), max 12 buckets, scrolls back in time by period.
-- **Who paid** in the selected period: horizontal bars per member.
-- `See as table` (a11y, from design2).
+Headline (group total · your share). `Day | Week | Month`, with the default picked from
+the group's span. The axis starts at the first expense. The readout line has **See them →**,
+which opens Expenses filtered to the selected bar (critic: "tap a chart bar to filter").
+Then **Who paid**.
 
-## 4. Add expense (`add-expense.html`, `add-expense-repeat.html`)
+### `⋯` Group menu · `group-menu.html`
 
-Full-screen sheet, **amount first**:
+Members and invite link · Name and icon (a letter tile until an emoji is picked; **no
+default emoji**) · Currency (fixed once there are expenses, with the reason shown) ·
+Simplify debts · Export as CSV · **Leave group** (last, red; needs ₹0 balance, and when
+you're not at ₹0 it says how much and links to Settle up).
 
-```
-[×]        [G Goa Trip ▾]
-          ₹ 2,400|              ← custom keypad owns the bottom half
-[ What for?                ]
-[Dinner] [Scooter fuel] [Breakfast] [Cab]      ← this tablet's frequent notes
-[Paid by You ▾] [Split Equally · 4 ▾] [Today ▾]
-       ₹600 each · you lend ₹1,800             ← live preview, fixed 36px line
-┌ 1 2 3 / 4 5 6 / 7 8 9 / . 0 ⌫ ┐
-└ [✓ Save ₹2,400] ┘
-```
+## 4. Add expense · `add-expense.html`, `add-expense-repeat.html`, `add-expense-short.html`
 
-Decisions:
+Amount first on a fixed keypad. Note with chips. Then the defaults row (`You paid ▾`,
+`Equally · 4 ▾`, `Today ▾`), a live preview line, and **Save pinned to the bottom** (on an
+iPhone 13 at 390×664 the keys shrink to 42px; Save never leaves the screen). Defaults:
+split equally among everyone, payer you, date today. Memory comes from the note you type,
+is always announced, and can be undone (`SPEC.md §4`). Closing keeps a draft per group.
 
-- **Amount first, on a custom keypad.** The amount is the one field every expense
-  needs. A custom keypad gives a fixed layout: the OS keyboard resizing the viewport is
-  the jank we're removing. Typing the note brings up the OS keyboard instead, and the Save
-  bar rides on top of it (`SPEC.md §3`).
-- **Default split = equally among everyone in the tablet.** It's right most of the time,
-  and wrong-by-memory is worse than one extra tap. The "same people as last time" chip
-  covers trips (P2), and the 2-person presets cover couples (P3).
-- **Default payer = you.** Whoever adds an expense usually paid for it. We don't
-  silently remember the last payer, because a wrong payer flips who owes whom. The payer
-  does change automatically when the note matches a past entry (Rent → Kabir), and that is
-  always announced in the blue strip with Undo.
-- **Note required**, but one tap via chips. The Save button explains why it's disabled
-  ("Add what it was for") instead of just greying out.
-- **Date = today**, with chips `Today / Yesterday / Pick`. Never copied from a matched entry.
-- The **tablet chip** is always visible. It's preselected (§4 Memory), and changing the
-  tablet re-validates payer and split.
+## 5. Settling
 
-## 5. Settle (`settle.html`)
+- **In a group** (`settle.html`): your outstanding direct debts there as radio cards,
+  prefilled, `Record ₹3,000 to Arjun`; partial amounts allowed.
+- **With a friend, across every group** (`settle-friend.html`, owner decision): one
+  amount, `Settle ₹1,450`. The sheet shows the per-group payments Clay will record (Goa:
+  you → Arjun ₹3,000; Flat 4B: Arjun → you ₹1,550), so you're square in every group. Full
+  amount only; for part of it, settle inside one group. No UPI, no confirmation from the
+  other person. One Undo removes all of them.
 
-Bottom sheet. Opens from: the header `Settle up`, a Balances row `Settle`, or the Person
-view's per-tablet `Settle`.
+## 6. Friend · `person.html`
 
-- Your outstanding transfers in this tablet as **radio cards**. The one you came from is
-  preselected, else the largest. Others' transfers aren't shown (anyone can still record
-  them from Balances → their row → `Record a payment for them`).
-- Big amount, prefilled with the full balance. `Paying part of it? Change amount` opens
-  the keypad.
-- One primary: `Record ₹4,400 to Arjun`. Honest footnote: Clay only records it.
-- After: toast with Undo (5 s), standing animates, the payment row appears in Inscriptions.
+Net with them across groups, **Settle ₹X** (primary) and **Add expense** (secondary),
+**By group**, then **Shared expenses**. That replaces today's dead end.
 
-## 6. Person (`person.html`)
+## 7. Search · `search.html`
 
-From Home → People. Net across tablets (per currency), `By tablet` with Settle on each
-(each tablet settles separately, as in design2), then `Recent with Arjun`: a cursor list
-of inscriptions you both appear on, across tablets, with the tablet name in the subtitle.
+From a group's nav (that group) or Groups (all groups). Field + `Cancel`, scope line,
+chips (`Paid by me`, `I'm in it`, `Payments`, `Any time ▾`), then a fixed count + total
+line, then results grouped by year with the match underlined. Same cursor contract.
 
-## 7. Search (`search.html`)
+## 8. Adding people · `add-people.html` (owner decision: invite link only)
 
-- Entry: the search icon in a tablet's nav (scope = that tablet) or on Home (scope = all).
-- Search replaces the nav, so the field is focused with the keyboard up. A scope line
-  (`Searching Flat 4B · 1,240 inscriptions`), filter chips (`Paid by me`, `I'm in it`,
-  `Payments`, `Any time ▾`), then a fixed **count + total** line (`27 matches · ₹78,410
-  in total`).
-- Results use the same row component with the match underlined. They're grouped by
-  **year** (matches are sparse, so month headers would be one row each), and paginated
-  with the same cursor contract.
-- Back/Cancel restores the list and its scroll position.
+- **Invite with a link · Share** comes first: the main way anyone new joins.
+- Below it, **From your groups**: people you already share a group with, with **Add**;
+  current members show **Already in this group** (dimmed, no button). Typing filters this
+  list locally.
+- **No search of all Clay users** (privacy). When nothing matches: `No one called "zubin"
+  in your groups` plus a pointer back to the link.
+- The sheet is top-anchored at full height. Its geometry never changes as you type.
 
-## 8. Members (rare)
+## 9. Join · `join.html`, then `invite-landing.html`
 
-`⋯ → Members` sheet: the list, `Add a name`, `Copy invite link`, `Leave` (design2 rules).
-Add a name is the **top-anchored, full-height** sheet from `member-search.html`. Its
-geometry never changes while you type.
+The invite link opens a join page: who invited you, the group card, and one form (Your
+name, Username suggested from the name with the rules shown, Password) → **Join Goa
+Trip**. `Already on Clay? Log in and join`. You land in the group with a welcome card that
+explains your balance. Never on a "Welcome back" login or a "Start a group" empty state.
 
-## 9. What moved, summary
+## 10. What moved
 
 | Thing | Was | Now | Why |
 |---|---|---|---|
-| Expense list | 4th section, y≈1005 | Default tab, y≈300 | Most frequent job |
-| Your standing | 220px card with 2 buttons | 56px strip + Settle | Glance stays, space returns to the list |
-| Reckoning + simplify | Always on screen | Balances tab | Only needed at settle time |
-| Tablet chart | Always rendered | Spending tab, lazy | Occasional |
-| Payments | Separate section at the end | Inline, chronological | One history |
-| Add a name | Primary-size button every visit | `⋯` menu | Rare |
-| Your spending card | Home | Your seal | Occasional; pushed People down |
-| Add expense | Description first, native date input | Amount first, keypad, chips | Fewer taps, no layout jumps |
-| Group invite | Didn't exist | Link in Add a name / Members | First-run journey |
-| Search | Didn't exist | Tablet + global | Old expenses at 1,000+ rows |
+| Expense list | 4th section, y=1,014 | Default tab, y≈300 | Most frequent job |
+| Your balance | 220px card, 2 buttons | 56px strip + Settle up | Glance stays, space goes to the list |
+| Reckoning + simplify | Always shown; simplify on | Balances tab; simplify off by default | Settle-time only; stable numbers |
+| Chart | Always rendered | Spending tab, lazy, bar → filter | Occasional |
+| Payments | Separate list at the bottom | In the timeline | One history |
+| Add a name | Big button every visit; searched all users | `⋯` → Members and invite link; your groups only | Rare; privacy |
+| Spending card | Home | Profile | Occasional |
+| Add expense | Description first; not on Home; Save off-screen on iPhone | Amount first, on Home, Save pinned | Fewer taps, no lost Save |
+| Settle | Per group only | Also per friend across groups | Owner decision |
+| Friend page | Dead end | Settle, add, by group, shared expenses | Critic |
+| Group settings | None | `⋯` menu | Critic |
+| Locked rows | Locked chip + disabled buttons + long note | `X left` tag, no Edit, one-line reason, Add a correction | Owner decision |
+| Words | Tablet, Inscribe, Archive, Seal, Hammurabi | Group, Add expense, Activity, Profile, Simplify debts | Owner decision |
