@@ -51,7 +51,6 @@ input{width:100%;font-size:17px;padding:14px;border:1px solid #ddd;border-radius
     <div class="row" onclick="push('goa')"><div class="av">🏠</div><div class="t">Flat 402<small>4 people</small></div><span class="r">−₹2,140</span></div>
     <div class="row" onclick="push('goa')"><div class="av">🎂</div><div class="t">Riya's birthday<small>6 people</small></div><span style="color:#777">settled</span></div>
   </div>
-  <p class="mode" id="mode"></p>
 </section>
 
 <section class="screen off" id="goa">
@@ -112,7 +111,5 @@ function tab(id,btn){document.querySelectorAll('nav button').forEach(b=>b.classL
   if(id!=='groups'&&!$('goa').classList.contains('off'))history.back();}
 function sheet(open){$('sheet').classList.toggle('show',open);$('dim').classList.toggle('show',open)}
 renderDebts();
-const s=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-$('mode').textContent=s?'📱 Running as installed app':'🌐 In browser: install it from the menu';
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
