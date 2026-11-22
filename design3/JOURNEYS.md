@@ -21,12 +21,12 @@ weren't measured; they come from my own pass on 21 Nov 2026 with two `ux2_*` acc
 | # | Job | How often | Start screen (new) | Target | Current (measured) |
 |---|---|---|---|---|---|
 | 1 | **Add an expense right after it happens** | 3-15 a week (trips: 5+ a day) | Anywhere: `Add expense` on Groups and inside every group. The last group is preselected | **3 taps, < 10 s**, Save always visible, the new row highlighted at the top | **6 taps, 1 scroll, 2 keyboard switches, ~25-30 s.** No add on Home (only "New tablet"). On iPhone 13 Save sits off-screen even without the keyboard (ends at y=690 on a 664px screen). No autofocus; Enter doesn't advance; Save is disabled with no reason; closing throws the draft away silently; no description suggestions; the saved row isn't visible after saving |
-| 2 | **Glance: do I owe anyone, does anyone owe me** | daily | Groups (cold start) | **0 taps, < 2 s** | 0 taps *(walkthrough)*, but amounts read `₹13,425.00`, paise rounding looks random across rows, and the add button covers the amount column and Friends rows |
+| 2 | **Glance: do I owe anyone, does anyone owe me** | daily | Groups (cold start: net) or the Friends tab (net + owe/owed tiles + per-friend list) | **0 taps, < 2 s** | 0 taps *(walkthrough)*, but amounts read `₹13,425.00`, paise rounding looks random across rows, and the add button covers the amount column and Friends rows |
 | 3 | **Check a group's recent expenses** | 2-5 a week | Groups → group | **1 tap**, first expense at y≈300 | First expense at **y=1,014 (Pixel 7) / 1,052 (iPhone 13)**: 1.2-1.6 screens down, under the balance card, reckoning and chart |
 | 4 | **See who paid** | with #3 | Expense row subtitle | 0 extra | 0 extra, after the scroll in #3. Avatars all read "U" for `ux_*` users, so faces don't help |
-| 5 | **Settle with a friend** | 1-4 a month | Friend's page → `Settle ₹X` (all groups at once) or group → `Settle up` | **3 taps**, one amount per friend | Settle prefill works. But it's per group only, and the friend's page is a dead end (no shared expenses, no settle). With Simplify on, "who do I owe Rahul" changes when **unrelated** expenses are added |
+| 5 | **Settle with a friend** | 1-4 a month | Friends tab → friend → `Settle ₹X` (all groups at once), or group → `Settle up` | **3 taps**, one amount per friend | Settle prefill works. But it's per group only, and the friend's page is a dead end (no shared expenses, no settle). With Simplify on, "who do I owe Rahul" changes when **unrelated** expenses are added |
 | 6 | **Find an old expense** ("last month's plumber") | 1-3 a month | Group → search, or tap a chart bar | **2 taps + 3-4 letters, < 6 s** | **Scroll 2,985px (4.5 screens).** Three identical rows, no year on dates, no search |
-| 7 | **Review spending** | monthly | Group → Spending tab | 2 taps, no jumps | Week/Month removes and reinserts the chart (+37 / +140 ms), the card collapses ~280px, **CLS 0.14**, a tooltip is pinned on an empty current week, and 9 empty leading months show |
+| 7 | **Review spending** | monthly | Group → Spending tab; Profile → Your spending | 2 taps, no jumps; your share **and** the total in one chart | Week/Month removes and reinserts the chart (+37 / +140 ms), the card collapses ~280px, **CLS 0.14**, a tooltip is pinned on an empty current week, and 9 empty leading months show |
 | 8 | **Add people / manage members** | rare | Group → `⋯` → Members and invite link | Share link 2 taps; add someone from your groups 3 taps | The search input moves **252→264→291→279px** while typing (the sheet is bottom-anchored and resizes); the hint is pinned where the keyboard covers it; it searches every user on the server |
 | 9 | **Group settings, leaving, fixing an old expense with someone who left** | rare | Group → `⋯`; a locked row | 2 taps; a correction in 3 | No settings at all: no rename, emoji (default 🏖️ even for "Flat 4B"), currency. A 1:1 group named "Rahul" is also "Rahul" on Rahul's phone. The leave guard works |
 | 10 | **First run, invited by a friend** | once per user | Invite link → join page → that group | **1 form, < 60 s**, landing in the group with the debt explained | The invited user lands on a **"Welcome back" login**, then an empty state saying "Start a tablet". No welcome when added. The username is silently lowercased and there's no display name |
@@ -55,7 +55,7 @@ groceries. The pain points: the 1st of the month, and "did anyone add the electr
 | Mon 3 Nov | You log WiFi | Same as last month | `Add expense`, `wi` | Chip **WiFi** (frequent here) fills ₹1,199, payer you, split 3. The date is **today**, never copied |
 | Wed 12 Nov | Arjun pays electricity | Amount differs every month | Types ₹2,640, then `ele` | Fills payer and split, **not** the amount (it isn't stable, and he already typed one) |
 | Sun 16 Nov | "Who paid the gas last time?" | Find it in seconds | Flat 4B → search | `gas` → 19 results grouped by year, newest first; the top row says `Arjun paid ₹1,050 · 2 Oct` (`search.html`) |
-| 30 Nov | Month-end, Kabir owes you | One number per flatmate | Groups → Friends → Kabir | Kabir's page: `Kabir owes you ₹4,800`, **Settle ₹4,800**. One record covers every group they share (`settle-friend.html`) |
+| 30 Nov | Month-end, Kabir owes you | One number per flatmate | Friends tab → Kabir | Kabir's page: `Kabir owes you ₹4,800`, **Settle ₹4,800**. One record covers every group they share (`settle-friend.html`) |
 | Any day | Look back at March | Smooth scroll, no "load more" button | Flings the Expenses list | Pages of 50 load ahead; sticky header `March 2026 · ₹61,300 · 44 ▾` → **Jump to a month** (`month-jump.html`) |
 | Jan | A previous flatmate, Rahul, moved out last year (settled, left). Arjun spots that an old electricity bill was ₹300 too high | Fix it | Taps the old row | The row is locked because Rahul left. It shows a `Rahul left` tag and no Edit. The sheet gives one line of reason plus **Add a correction**, which opens Add expense prefilled as a correcting entry among the current flatmates (`locked-expense.html`) |
 
@@ -77,14 +77,15 @@ last evening or the week after.
 | Day 2, 21:10 | Kabir logs drinks for the same 3 | Same 3 again | `Add expense` | His last add here was < 3 h ago with a custom split, so a chip **Same 3 as Parasailing** sits beside the split chip. One tap. Never applied silently |
 | Day 3, offline | You add scooter fuel | It doesn't vanish | Save | The row appears at once with `saving…`; an outbox with an idempotency key retries on reconnect. If it fails for good, the row turns red with **Retry / Edit** |
 | Day 3 | "Did Meera add yesterday's breakfast?" | Open group, see it | Taps Goa Trip | **Expenses is the default tab**, first row at y≈300. `Arjun paid ₹2,400` answers "who paid" |
-| Day 5 | Settle up | Clear, stable amounts | Goa Trip → `Settle up` | **Simplify debts is off by default**, so the numbers are direct and only change when an expense involves you: `You pay Arjun ₹3,000`, `You pay Meera ₹2,800` (`settle.html`). Turning Simplify on is a group choice, with a per-person explanation |
-| Week after | "What did the trip cost me?" | One number | Goa Trip → Spending | `Trip total ₹57,000 · your share ₹14,250`. **Day** buckets because the trip spans < 21 days; the axis starts on day 1. Tapping a bar → **See them** opens that day's expenses (`group-spending.html`) |
+| Day 5 | Settle up | Clear amounts she can trust | Goa Trip → `Settle up` | **Simplify debts is on** (the default), so it's 3 payments, not 4: `You pay Arjun ₹4,400`, `You pay Meera ₹1,400` (`settle.html`). Puzzled why Arjun and not Meera? **Why Arjun?** under the row shows the direct debts it replaces; your total stays ₹5,800 (`group-balances.html`). Her Friends tab still shows direct numbers (Arjun ₹3,000 in Goa), which only move when an expense involves them both |
+| Week after | "What did the trip cost me, and the group?" | Both numbers | Goa Trip → Spending | `Trip total ₹57,000 · your share ₹14,250`. **Day** buckets because the trip spans < 21 days; the axis starts on day 1. Stacked bars: solid = your share, light = others, full bar = total; readout `₹3,800 your share of ₹12,000`. Toggle `Both / My share / Total`. Tapping a bar → **See them** opens that day's expenses (`group-spending.html`) |
 | Week after | Riya settled and wants out | Leave cleanly | `⋯` → **Leave group** | Allowed only at ₹0 (unchanged). After she leaves, every row she's on is locked for everyone and reads as history: `Riya's share was ₹3,200`, never "you owe Riya" |
 
 **Lesson:** adds happen standing up, one-handed, often offline. That means amount-first
 entry on a fixed keypad, optimistic save with an outbox, and one sheet to change the split.
 Default split stays "everyone, equally", and the remembered subset is offered as a chip.
-Simplified routes broke trust, so per-person numbers default to direct balances.
+Simplified routes looked arbitrary, so every simplified row explains itself ("Why
+Arjun?") and per-friend numbers are always direct balances.
 
 ### P3 · Riya & you: a couple
 
@@ -95,8 +96,8 @@ Netflix, "I paid for your thing". Settling is a monthly UPI "to make it even".
 |---|---|---|---|---|
 | Daily | Logs Zepto ₹840 | Fastest path; it's always this group | `Add expense` on Groups | With one active group, it's preselected with no extra tap. Payer you, 50/50. Chips `Zepto`, `Blinkit`, `Dinner`, `Uber` |
 | Weekly | "I paid for Riya's haircut, all of it" | Not 50/50 | Split chip | Two-person groups get presets **Equally · Riya owes all · I owe all** (mapped to exact splits) |
-| Any time | Who's ahead | One number | Opens app | Groups hero `₹420 owed to you, net`; Friends row `Riya Sen · owes you ₹420` |
-| Month end | Even it out | One tap, then UPI outside Clay | Friends → Riya → **Settle ₹420** | One record. No UPI and no "Riya confirms" step (owner decision). Footnote: "Clay only records it" |
+| Any time | Who's ahead | One number | Opens app → Friends tab | Totals `₹420 owed to you, net`; row `Riya Sen · owes you ₹420` (`friends.html`) |
+| Month end | Even it out | One tap, then UPI outside Clay | Friends tab → Riya → **Settle ₹420** | One record. No UPI and no "Riya confirms" step (owner decision). Footnote: "Clay only records it" |
 | Sometimes | "How much on Zepto in October?" | A number | Search `zepto`, `Any time ▾` → October | Count line `14 matches · ₹9,860 in total` |
 
 **Lesson:** two-person groups need the "paid for the other" presets. The global add

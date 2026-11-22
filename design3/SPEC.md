@@ -115,10 +115,12 @@ states. The preview line exists even when empty (it shows `₹0 each`). See
   everywhere (pickers, shares, balances). Switching Equally ↔ Exact ↔ Shares **keeps the
   chosen set of people**; Exact lists only those people plus `+ Add someone` (critic:
   Exact re-added people who were unticked).
-- **Rounding:** equal splits are computed in paise; leftover paise go to the **payer's
-  share**, so everyone else owes the same figure. The preview says it when it happens
-  (`₹333.33 each · Meera's share ₹333.34`). Amounts show paise only when they have
-  them, consistently per row (critic: rounding looked random).
+- **Rounding:** the current rule stays (owner decision): equal splits are computed in
+  paise, and leftover paise go one each to the members with the **lowest user ids**. The
+  preview shows the common figure (`₹333.33 each`). The expense sheet lists every
+  share exactly, so a ₹0.01 difference is visible where someone looks for it. Amounts
+  show paise only when they have them, consistently per row (critic: rounding looked
+  random across rows).
 
 ### 3.3 Save = optimistic
 
@@ -152,7 +154,7 @@ Settle uses the same pipeline (`POST /payments`).
 | Frequent notes | Top 4 by (count in 90 days) × recency, per group | Chips under the note field | — |
 | Note match refill | Typing ≥ 3 chars that prefix-match a past note in this group (case-insensitive, trailing month/number ignored: `Rent, October` ≈ `Rent`) fills **payer and split** from the latest match. **Amount** is filled only if the last 3 matches had the same amount **and** the amount is still 0 | Blue strip `Filled in from Rent, October. Kabir paid, split 3 ways.` + Undo | Never overwrites a typed amount. Never copies the date. Strip stays until Save, so the change is never silent |
 | Same people as last time | If your last add in this group was < 3 h ago with a non-everyone split | Chip `Same 3 as Parasailing` beside the split chip | Never applied by default |
-| Simplify debts | A **group setting on the server** (everyone sees the same thing), default **off**. Replaces the per-device `clay.simplify.<gid>` | Balances, `⋯` menu | — |
+| Simplify debts | A **group setting on the server** (everyone sees the same thing), default **on** (unchanged). Replaces the per-device `clay.simplify.<gid>` | Balances, `⋯` menu | — |
 | Last tab | Not remembered. A group always opens on Expenses | — | Opening on Spending because you once looked at it |
 | Chart period | Per group, per session | Spending | — |
 
@@ -185,7 +187,37 @@ bottom-anchored, sized to its content, and searches the server, so its input mov
 - The keyboard never covers a hint: all help text sits above the field or in the label
   slot right under it.
 
-### 5.2 Chart period switch (`chart-states.html`): no popup, bars morph
+### 5.2 Charts (`chart-states.html`, `group-spending.html`, `profile.html`): your share and total, no popups
+
+**What a bar shows** (owner decision): stacked bars. **Your share** is the solid clay
+segment (`primary`) at the bottom; **everyone else's part** sits on top as a lighter
+segment (`#F0D9CB` fill with a 1px `#C07A5A` edge, so it holds 3:1 against the card).
+The full bar height is the **total** spend. A legend line names both, so colour isn't
+the only signal.
+
+**Measure toggle:** a small segmented control (32px) **Both (default) | My share |
+Total**, per chart, remembered per session.
+- *Both*: the stacked bars.
+- *My share*: the top segments shrink to 0 with `scaleY` from their base, and the
+  y-scale rescales to the share maximum in the same 240 ms motion (frame B in the mock).
+- *Total*: one tone (`bar` blue) at full height, labelled "Whole group" (or "All your
+  groups" on the account chart).
+- Every mode uses the same bar slots and the same card height. Nothing mounts or
+  unmounts, so there's no layout shift.
+
+**Readout** (fixed two-line box above the plot, `aria-live=polite`): line 1 is the period
+and context (`November 2026 · Flat 4B`); line 2 shows both numbers in *Both* (`₹15,970
+your share of ₹47,900`), one number in the other modes (`₹15,970 your share` / `₹47,900
+spent by the group`). The box height is identical across modes.
+
+**Account chart** (Profile → Your spending): total = everything spent in all groups you're
+in; your share = your part of it. Payments to settle up are never spending. **One
+currency at a time** via chips (`₹ INR`, `¥ JPY`), never mixed or converted.
+
+Accessibility: each bar is a button labelled `November: your share ₹15,970 of ₹47,900`;
+`See as table` lists period · your share · total.
+
+#### Period switch
 
 Cause of the current flash: `by` is part of the resource key, so switching
 unmounts the chart (loading state) and remounts it with a selected-bar **bubble** that
@@ -206,8 +238,10 @@ animates in. Fix:
   `20 Nov ×` above the list.
 - Selection maps by **date**: the period containing the previously selected date stays
   selected (the current month → the current week).
-- **Data:** both granularities come in one request when the tab opens
-  (`GET /groups/:id/spending?by=day,week,month`), so the switch is synchronous. If the
+- **Data:** all granularities come in one request when the tab opens
+  (`GET /groups/:id/spending?by=day,week,month`, and `GET /spending?by=week,month&currency=INR`
+  for the account chart). Each bucket is `{start, mine, total}`, so the measure toggle
+  never needs the network and the period switch is synchronous. If the
   requested granularity is missing (cold), keep the old bars, set the segment at once,
   run a 2px lapis hairline along the plot top, then morph when the data lands. Never
   unmount, never show a spinner over the plot.
@@ -397,7 +431,7 @@ group in the same transaction. `POST /invites/{token}/join` covers logged-in use
 `GET /people` → everyone you share at least one group with:
 `[{id, display_name, username, groups:[{id, name, net_with_me}], net_with_me_by_currency}]`.
 `net_with_me` is the **direct (pairwise) balance** in that group, not the simplified
-one. This feeds Friends on Groups, the Friend page and Add people.
+one. This feeds the Friends tab, the Friend page and Add people.
 
 `POST /people/{uid}/settle` with `{currency, expected: [{group_id, amount, direction}],
 idempotency_key}`. In one transaction, the server recomputes each shared group's direct
@@ -473,7 +507,12 @@ expenses"), `list.back_to_latest`, `jump.title` (Jump to a month), `jump.hint`,
 `friend.settle_square` ("You pay {name} {amount} and you're square in every group."),
 `locked.tag` ("{name} left"), `locked.reason`, `locked.share_was` ("{name}'s share
 was {amount}"), `locked.correction` ("Add a correction"), `simplify.why` ("Why {name}?"),
-`add.draft` ("Draft from {time}"), `add.rounding`. The validator's placeholder rule
+`add.draft` ("Draft from {time}"), `chart.measure_both` (Both), `chart.measure_mine` (My
+share), `chart.measure_total` (Total), `chart.readout_both` ("{mine} your share of
+{total}"), `chart.legend_mine` (Your share), `chart.legend_others` (Others),
+`chart.whole_group` (Whole group), `nav.friends` (Friends), `friends.totals_title`
+("With all your friends"), `friends.direct_note`, `friends.not_settled`,
+`friends.settled`, `settle.differs_note`. The validator's placeholder rule
 applies to each.
 
 **Default Clay wording** (owner decision), replacing the history-themed words in
@@ -499,18 +538,24 @@ the same words with system fonts.
 ## 11. Simplify debts without losing trust
 
 Critic: with simplify on, "who do I owe Rahul" changes when unrelated expenses are added,
-and a Splitwise user won't trust that. Rules:
+and a Splitwise user won't trust that. Owner decision: **Simplify debts stays on by
+default.** Trust comes from explaining, not from switching it off:
 
-- **Default off** for new groups. Existing groups keep their current state, with a
-  one-time banner explaining the switch.
-- **Per-person numbers are always direct**, whatever the toggle says: Groups → Friends,
-  the Friend page, settle-with-a-friend and the Home tiles. Only the group's Balances
-  "Who owes whom" list follows the toggle.
-- With simplify on, each of your rows has `Why Arjun?`. It expands to the direct debts
-  it replaces: `You owe Meera ₹1,400 · Meera owes Arjun ₹1,400 → you pay Arjun instead.
-  Totals don't change.`
-- Turning it on or off is a group setting (server-side, §6.8), shown with who changed
-  it in Activity.
+- **Per-friend numbers are always direct (pairwise)**, whatever the group setting: the
+  Friends tab, the Friend page, settle-all-with-a-friend and the Friends totals card.
+  Those only change when an expense involves you and that friend.
+- The group's Balances "Who owes whom" list and its Settle up sheet follow the setting.
+- With simplify on, each of your rows has **`Why Arjun?`**. It expands inline (a
+  lapis-soft block under the row, no navigation) to the direct debts it replaces:
+  `Directly you owe Arjun ₹3,000 and Meera ₹2,800. Meera owes Kabir ₹1,400, and Kabir
+  owes Arjun, so ₹1,400 of what you owe Meera goes straight to Arjun instead. You still
+  pay ₹5,800 in total.` The server can return the chain with the balances
+  (`balances.explain[from,to] = [direct legs]`); otherwise the client derives it from
+  pairwise vs simplified.
+- The group Settle up sheet adds a footnote when its amount differs from the direct
+  balance with that person (`settle.html`).
+- The setting is server-side (§6.8), so all members see the same routes. Changes show in
+  Activity with who made them.
 
 ## 12. Leaving and locked rows (owner decision: keep the current rules)
 
@@ -547,7 +592,11 @@ changes (`locked-expense.html`):
 - Group icons: letter tile from the name until someone picks an emoji. The
   name-based emoji default (🏖️ for "Flat 4B") goes away.
 
-## 14. Floating button and toasts
+## 14. Tab bar, floating button and toasts
+
+- **4 tabs**, each 25% wide: Groups · Friends · Activity · Profile (icons: group tile,
+  people, archive box, seal). Selected tab: clay-soft pill behind the icon plus clay
+  label, `aria-current=page`. Tab switches keep each tab's scroll and state.
 
 - The Add expense button collapses to a 56px circle on scroll down (240 ms, transform +
   width via `clip-path`, no reflow) and extends again on scroll up or at the top.

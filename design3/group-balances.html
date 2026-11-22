@@ -23,6 +23,11 @@
 .mrow{height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--line)}
 .mrow .n{flex:1;font:600 15px var(--sans)}.mrow .n span{display:block;font:400 12px var(--sans);color:var(--ink2)}
 .mrow .r{text-align:right}.mrow .r small{display:block;font:500 11px var(--sans);color:var(--ink2)}.mrow .r b{font:600 15px var(--sans)}
+
+.sw.on{background:var(--lapis)}.sw.on::after{left:auto;right:3px}
+.whyl{font:600 13px var(--sans);color:var(--lapis);margin-top:3px;display:inline-flex;align-items:center;gap:4px}
+.whyx{padding:10px 16px 12px;background:var(--lapis-soft);font:400 12.5px/1.45 var(--sans);color:var(--ink);border-bottom:1px solid var(--line)}
+.whyx b{font-weight:600}
 </style></head>
 <body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
@@ -62,19 +67,17 @@
 <div class="pad">
  <div class="sec-h"><h2>Who owes whom</h2><a class="link">How we got this</a></div>
  <div class="card">
-  <div class="tr mine"><div class="w num">You owe <b>Arjun</b> <b class="owe">₹3,000</b></div><button class="btn sm secondary">Settle up</button></div>
-  <div class="tr mine"><div class="w num">You owe <b>Meera</b> <b class="owe">₹2,800</b></div><button class="btn sm secondary">Settle up</button></div>
-  <div class="tr"><div class="w num"><b>Kabir</b> owes <b>Arjun</b> ₹10,400</div></div>
-  <div class="tr"><div class="w num"><b>Meera</b> owes <b>Kabir</b> ₹1,400</div></div>
-  <div class="tog"><div class="t"><b>Simplify debts</b><span>Off. On would make this 3 payments instead of 4, but who pays whom can change when anyone adds an expense.</span></div><div class="sw" role="switch" aria-checked="false" aria-label="Simplify debts"></div></div>
+  <div class="tog"><div class="t"><b>Simplify debts</b><span>On: 3 payments instead of 4. Same totals for everyone.</span></div><div class="sw on" role="switch" aria-checked="true" aria-label="Simplify debts"></div></div>
+  <div class="tr mine" style="min-height:64px"><div class="w num">You owe <b>Arjun</b> <b class="owe">₹4,400</b><br><span class="whyl" aria-expanded="true">Why Arjun?<svg class="ic s" aria-hidden="true"><use href="#i-down"/></svg></span></div><button class="btn sm secondary">Settle up</button></div>
+  <div class="whyx num">Directly you owe <b>Arjun ₹3,000</b> and <b>Meera ₹2,800</b>. Meera owes Kabir ₹1,400, and Kabir owes Arjun, so ₹1,400 of what you owe Meera goes straight to Arjun instead. You still pay <b>₹5,800</b> in total.</div>
+  <div class="tr mine" style="min-height:64px"><div class="w num">You owe <b>Meera</b> <b class="owe">₹1,400</b><br><span class="whyl">Why Meera?<svg class="ic s" aria-hidden="true"><use href="#i-down"/></svg></span></div><button class="btn sm secondary">Settle up</button></div>
+  <div class="tr"><div class="w num"><b>Kabir</b> owes <b>Arjun</b> ₹9,000</div></div>
  </div>
  <div class="sec-h" style="margin-top:20px"><h2>Everyone</h2><span class="small muted">net in this group</span></div>
  <div class="card">
   <div class="mrow"><span class="av c1 " aria-hidden="true">AP</span><div class="n">You</div><div class="r"><small>owe</small><b class="num owe">₹5,800</b></div></div>
   <div class="mrow"><span class="av c2 " aria-hidden="true">AK</span><div class="n">Arjun Kapoor</div><div class="r"><small>is owed</small><b class="num owed">₹13,400</b></div></div>
-  <div class="mrow"><span class="av c3 " aria-hidden="true">MI</span><div class="n">Meera Iyer</div><div class="r"><small>is owed</small><b class="num owed">₹1,400</b></div></div>
-  <div class="mrow"><span class="av c4 " aria-hidden="true">KS</span><div class="n">Kabir Shah</div><div class="r"><small>owes</small><b class="num owe">₹9,000</b></div></div>
  </div><div style="height:150px"></div>
 </div>
-<div class="fade"></div><button class="fab"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add expense</button><nav class="tabbar" aria-label="Main"><a class="tb on" aria-current=page><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-group"/></svg></span>Groups</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></span>Activity</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-seal"/></svg></span>Profile</a></nav>
+<div class="fade"></div><button class="fab"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add expense</button><nav class="tabbar" aria-label="Main"><a class="tb on" aria-current=page><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-group"/></svg></span>Groups</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg></span>Friends</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-archive"/></svg></span>Activity</a><a class="tb"><span class="pill"><svg class="ic" aria-hidden="true"><use href="#i-seal"/></svg></span>Profile</a></nav>
 </body></html>

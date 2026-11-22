@@ -14,14 +14,15 @@ re-skin the words.
 ## 1. Map
 
 ```
-Tab bar (3):   Groups  ·  Activity  ·  Profile
-               ──────     ────────     ───────
-Groups (Home)            Activity              Profile
- ├ hero: net + owe/owed  (all activity,        ├ display name, username, avatar
- ├ Your groups           cursor-paginated)     ├ Your spending (moved off Home)
- ├ Friends (not settled)                       ├ Theme, sign out, install app
- ├ [Search all]
- └ [Add expense] ─────────────────────────────▶ Add expense (full-screen sheet)
+Tab bar (4):  Groups  ·  Friends  ·  Activity  ·  Profile
+              ──────     ───────     ────────     ───────
+Groups (Home)       Friends               Activity          Profile
+ ├ hero: net        ├ totals: net +       (all activity,    ├ name, username, avatar
+ ├ Your groups      │ owe / owed tiles    cursor-paginated) ├ Your spending (stacked
+ ├ + New group      ├ Not settled up                        │ chart, per currency)
+ ├ [Search all]     ├ Settled up                            └ Theme, install, sign out
+ └ [Add expense]    └ [Add expense]
+        └──────────────┴──────────────────────────────────▶ Add expense (full-screen sheet)
 
 Group  /g/:id  (header + 3 tabs; the tab is in the URL)
  ├ Expenses   /g/:id            ← default
@@ -29,13 +30,13 @@ Group  /g/:id  (header + 3 tabs; the tab is in the URL)
  ├ Spending   /g/:id/spending   (tap a bar → Expenses filtered to that period)
  ├ [Search]   /g/:id/search?q=
  ├ [⋯] Members and invite link · Name and icon · Currency · Simplify debts ·
- │     Export as CSV · Leave group
+ │     Leave group
  ├ [Settle up] sheet   /g/:id/settle
  ├ [Add expense] sheet /g/:id/add
  └ row ▶ Expense sheet /g/:id/e/:eid  (read first; Edit, or for locked rows
                                         "Add a correction")
 
-Friend  /p/:uid   (from Groups → Friends, or any avatar)
+Friend  /p/:uid   (from the Friends tab, or any avatar)
  ├ net with them across groups (direct balances), per currency
  ├ [Settle ₹X] → settle-all sheet (one record per group, behind the scenes)
  ├ [Add expense] → add sheet preselecting your shared group (or your 1:1 group)
@@ -45,29 +46,39 @@ Friend  /p/:uid   (from Groups → Friends, or any avatar)
 Join  /join/:token   (no auth) → one form (name, username, password) → /g/:id + welcome card
 ```
 
-The tab bar stays at 3. Friends live on the Groups screen rather than a 4th tab:
-friends-and-family users have 3-10 friends and 2-6 groups, which fit on one screen, so a
-separate tab would split the glance job in two.
+The tab bar has 4 tabs (owner decision): **Groups | Friends | Activity | Profile**.
+Friends gets its own tab because settling is person-centred (settle all with a friend),
+and keeping it apart leaves the Groups screen for the group list. Both screens show the
+net, so the cold-start glance works from either one; the default tab is Groups.
 
 ## 2. Groups (Home) · `home.html`
 
 1. **Title** `Groups` + search (across all groups).
-2. **Hero** (fixed 150px): net across groups in the selected currency, worded
-   (`owed to you, net` / `you owe overall` / `settled up`), plus two tiles
-   `You owe · 2 people` / `Owed to you · 2 people`. Amounts drop `.00` when there are no
-   paise (`₹13,425`).
+2. **Hero** (compact): net across all groups in the selected currency, worded
+   (`owed to you, net` / `you owe overall` / `settled up`), and one line `You owe in 1
+   group · owed in 2`. Amounts drop `.00` when there are no paise.
 3. **Your groups**, sorted by **latest activity**. Each 72px row carries the last
-   expense (`Meera · Dinner at Thalassa ₹12,000 · 2h`) and your balance. A group you were
-   just added to shows `Arjun added you · 1m` and a 2 s highlight.
-4. **Friends** you're not settled with, largest first; the rest fold into `+ N settled
-   up`. Numbers are **direct (pairwise) balances**, so they only change when an expense
-   involves you and that friend. Tap → Friend page.
-5. **Add expense** button. It collapses to a 56px round button when you scroll down and
-   comes back when you scroll up. The list has bottom padding = tab bar + button + 24px,
-   so the last row's amount can always scroll clear of it (critic: it covered amounts and
-   Friends rows).
+   expense (`Meera · Dinner at Thalassa ₹12,000 · 2h`) and your balance. Settled groups
+   say `settled up ₹0`. A group you were just added to shows `Arjun added you · 1m` and a
+   2 s highlight. `+ New group` ends the list.
+4. **Add expense** button, collapsing on scroll (`SPEC.md §14`).
 
-**Moved off Home:** the "Your spending" card, to Profile.
+## 2b. Friends tab · `friends.html`
+
+1. **Totals card**: net with all friends, plus tiles `You owe · 2 people ₹4,250` and
+   `Owed to you · 2 people ₹5,220`. Per currency, with the same chips as elsewhere.
+2. One line: `Direct balances: a friend's number only changes when an expense involves
+   you both.`
+3. **Not settled up**, largest first: avatar (display-name initials), name, shared
+   groups, and the direct balance worded (`you owe ₹1,450` / `owes you ₹4,800`).
+4. **Settled up**, folded below.
+5. Tap a friend → **Friend page** (§6). Add expense is here too.
+
+Per-friend numbers are always **direct (pairwise)** balances, even in groups that
+simplify debts (`SPEC.md §11`).
+
+**Moved:** the Friends list moved off Groups to this tab. The "Your spending" card lives
+on Profile.
 
 ## 3. Group screen
 
@@ -102,26 +113,30 @@ and month header stick.
 
 ### Balances tab · `group-balances.html`
 
-- **Who owes whom**: direct balances by default, your rows first with inline `Settle up`.
-- **Simplify debts** (a per-group setting, default **off**). Its note says what it saves
-  and what it costs ("pairs can change when anyone adds an expense"). When it's on, each
-  of your rows gets a `Why Arjun?` disclosure listing the direct debts it replaces
-  (`SPEC.md §11`).
+- **Simplify debts** (a per-group setting, default **on**, as before). Its note says what
+  it saves: `On: 3 payments instead of 4. Same totals for everyone.`
+- **Who owes whom** follows the toggle. Your rows come first with inline `Settle up`, and
+  each of your rows has a **`Why Arjun?`** disclosure that expands to the direct debts it
+  replaces (`SPEC.md §11`). That way a changed route explains itself instead of looking
+  like a bug.
 - **Everyone**: each member's net in this group.
 - `How we got this` sits in the section header.
 
 ### Spending tab · `group-spending.html`
 
 Headline (group total · your share). `Day | Week | Month`, with the default picked from
-the group's span. The axis starts at the first expense. The readout line has **See them →**,
-which opens Expenses filtered to the selected bar (critic: "tap a chart bar to filter").
-Then **Who paid**.
+the group's span; the axis starts at the first expense. The chart shows **both your
+share and the total** (owner decision): stacked bars with your share as the solid clay
+segment at the bottom and everyone else's part as a lighter segment on top, so the full
+bar is the total. A small toggle **Both (default) | My share | Total** switches in place.
+The fixed readout says both numbers (`Thu 20 Nov · ₹3,800 your share of ₹12,000`) and
+has **See them →**, which opens Expenses filtered to the selected bar. Then **Who paid**.
 
 ### `⋯` Group menu · `group-menu.html`
 
 Members and invite link · Name and icon (a letter tile until an emoji is picked; **no
 default emoji**) · Currency (fixed once there are expenses, with the reason shown) ·
-Simplify debts · Export as CSV · **Leave group** (last, red; needs ₹0 balance, and when
+Simplify debts · **Leave group** (last, red; needs ₹0 balance, and when
 you're not at ₹0 it says how much and links to Settle up).
 
 ## 4. Add expense · `add-expense.html`, `add-expense-repeat.html`, `add-expense-short.html`
@@ -134,13 +149,23 @@ is always announced, and can be undone (`SPEC.md §4`). Closing keeps a draft pe
 
 ## 5. Settling
 
-- **In a group** (`settle.html`): your outstanding direct debts there as radio cards,
-  prefilled, `Record ₹3,000 to Arjun`; partial amounts allowed.
+- **In a group** (`settle.html`): your outstanding debts there as Balances shows them
+  (simplified when Simplify debts is on), as radio cards, prefilled (`Record ₹4,400 to
+  Arjun`); partial amounts allowed. A footnote says when this differs from your direct
+  balance with that person.
 - **With a friend, across every group** (`settle-friend.html`, owner decision): one
-  amount, `Settle ₹1,450`. The sheet shows the per-group payments Clay will record (Goa:
+  amount, `Settle ₹1,450`, computed from **direct** balances. The sheet shows the
+  per-group payments Clay will record (Goa:
   you → Arjun ₹3,000; Flat 4B: Arjun → you ₹1,550), so you're square in every group. Full
   amount only; for part of it, settle inside one group. No UPI, no confirmation from the
   other person. One Undo removes all of them.
+
+## 5b. Profile · `profile.html`
+
+Name, username, avatar (`Edit name`). **Your spending**: the account-level chart with the
+same stacked bars and `Both | My share | Total` toggle. Total = everything spent in all
+groups you're in; your share = your part of it. One currency at a time (`₹ INR` / `¥ JPY`
+chips), never mixed or converted. Then Theme, Install Clay, Sign out.
 
 ## 6. Friend · `person.html`
 
@@ -176,7 +201,9 @@ explains your balance. Never on a "Welcome back" login or a "Start a group" empt
 |---|---|---|---|
 | Expense list | 4th section, y=1,014 | Default tab, y≈300 | Most frequent job |
 | Your balance | 220px card, 2 buttons | 56px strip + Settle up | Glance stays, space goes to the list |
-| Reckoning + simplify | Always shown; simplify on | Balances tab; simplify off by default | Settle-time only; stable numbers |
+| Reckoning + simplify | Always shown; simplify on | Balances tab; simplify still on, every route explains itself | Settle-time only; trust |
+| Friends | Section on Home | Own tab with totals card | Owner decision |
+| Charts | Total only, one tone | Stacked: your share + total, `Both / My share / Total` | Owner decision |
 | Chart | Always rendered | Spending tab, lazy, bar → filter | Occasional |
 | Payments | Separate list at the bottom | In the timeline | One history |
 | Add a name | Big button every visit; searched all users | `⋯` → Members and invite link; your groups only | Rare; privacy |
